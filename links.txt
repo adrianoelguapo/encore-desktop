@@ -1,0 +1,6 @@
+Crear Proyecto: https://dev.to/amatisse/building-a-simple-electron-application-with-vuejs-52aa
+Fuente: https://fonts.google.com/specimen/Geist?specimen.preview.text=Welcome+To+Encore+Festival&query=geist
+UI: https://www.behance.net/gallery/223204583/Your-Music-Your-Mood-AI-Powered-Playlist?tracking_source=search_projects|music+app+ui&l=23#
+DateTime Python: https://www.ionos.es/digitalguide/paginas-web/desarrollo-web/python-datetime/
+DateTiime Mongo: https://www.mongodb.com/docs/manual/reference/method/Date/
+Mi API en Flask: https://github.com/adrianoelguapo/back_python_vercel/blob/master/api/index.py
