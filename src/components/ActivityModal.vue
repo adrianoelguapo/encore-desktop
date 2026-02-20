@@ -123,7 +123,8 @@ export default {
         description: '',
         start: '',
         finish: '',
-        capacity: 100
+        capacity: 100,
+        state: 'active'
       },
       imageFile: null,
       currentImageName: null
@@ -140,13 +141,22 @@ export default {
     },
     formatDateForInput(isoString) {
       if (!isoString) return '';
-      // Extract YYYY-MM-DDTHH:mm from ISO string
-      return isoString.substring(0, 16);
+      // Ensure the string is treated as UTC if it's from the backend
+      const date = new Date(isoString);
+      if (isNaN(date.getTime())) return '';
+      
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
     },
     handleSubmit() {
       // Validate dates
       if (new Date(this.form.finish) <= new Date(this.form.start)) {
-        alert('End date must be after start date');
+        this.$emit('error', 'End date must be after start date');
         return;
       }
       
@@ -163,7 +173,8 @@ export default {
         description: '',
         start: '',
         finish: '',
-        capacity: 100
+        capacity: 100,
+        state: 'active'
       };
       this.imageFile = null;
       this.currentImageName = null;
@@ -179,7 +190,8 @@ export default {
             description: this.activityData.description,
             start: this.formatDateForInput(this.activityData.start),
             finish: this.formatDateForInput(this.activityData.finish),
-            capacity: this.activityData.capacity
+            capacity: this.activityData.capacity,
+            state: this.activityData.state || 'active'
           };
           this.currentImageName = this.activityData.image;
         } else {
@@ -202,36 +214,36 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(15px);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
+  z-index: 2000;
   animation: fadeIn 0.3s ease;
 }
 
 .modal-container {
-  background: #1a1a2e; /* Darker solid background */
-  border: 1px solid rgba(139, 92, 246, 0.5);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-  border-radius: 20px;
+  background: rgba(20, 15, 35, 0.8);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 24px;
   width: 90%;
   max-width: 600px;
   max-height: 90vh;
-  overflow-y: auto;
-  animation: slideUp 0.3s ease;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(139, 92, 246, 0.1);
+  overflow: hidden;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
 }
 
 .modal-header {
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 2rem 2rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(139, 92, 246, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .modal-title {
@@ -239,28 +251,37 @@ export default {
   font-weight: 700;
   color: white;
   margin: 0;
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .close-btn {
   background: transparent;
   border: none;
   font-size: 2rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   line-height: 1;
-  transition: color 0.2s;
+  transition: all 0.2s;
 }
 
 .close-btn:hover {
   color: white;
+  transform: rotate(90deg);
 }
 
 .modal-body {
   padding: 2rem;
+  overflow-y: auto;
 }
 
 .form-group {
   margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 .form-row {
@@ -273,30 +294,30 @@ export default {
 }
 
 label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 700;
 }
 
 .form-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
   color: white;
-  font-family: inherit;
   font-size: 1rem;
   transition: all 0.3s ease;
+  font-family: inherit;
+  width: 100%;
 }
 
 .form-input:focus {
   outline: none;
   border-color: #8b5cf6;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
 }
 
 .textarea {
@@ -323,11 +344,11 @@ label {
 
 .file-label {
   display: block;
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  border: 1px dashed rgba(139, 92, 246, 0.5);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.6);
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px dashed rgba(139, 92, 246, 0.4);
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(255, 255, 255, 0.5);
   text-align: center;
   transition: all 0.3s ease;
   max-width: 100%;
@@ -338,7 +359,6 @@ label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 100%;
 }
 
 .file-input:hover + .file-label {
@@ -351,12 +371,12 @@ label {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 10px;
+  padding: 0.8rem 1.8rem;
+  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -368,6 +388,7 @@ label {
 .btn-primary {
   background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
   color: white;
+  font-weight: 700;
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
 }
 
@@ -377,18 +398,19 @@ label {
 }
 
 .btn-primary:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 @keyframes fadeIn {
@@ -397,7 +419,13 @@ label {
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from { 
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>

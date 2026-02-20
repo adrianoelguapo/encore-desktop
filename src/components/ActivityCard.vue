@@ -23,12 +23,10 @@
       
       <div class="card-metrics">
         <div class="metric">
-          <span class="metric-label">Date</span>
-          <span class="metric-value">{{ formatDate(activity.start) }}</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Time</span>
-          <span class="metric-value">{{ formatTime(activity.start) }} - {{ formatTime(activity.finish) }}</span>
+          <span class="metric-label">Date & Time</span>
+          <span class="metric-value">
+            {{ formatDate(activity.start) }} • {{ formatTime(activity.start) }} - {{ formatTime(activity.finish) }}
+          </span>
         </div>
         <div class="metric">
           <div class="metric-label">Occupancy</div>
@@ -39,13 +37,36 @@
         </div>
       </div>
 
-      <div class="card-footer">
-        <button class="action-btn edit" @click="$emit('edit', activity)">
-          <span>Modify</span>
-        </button>
-        <button class="action-btn delete" @click="$emit('delete', activity.id)">
-          <img src="@/assets/icons/bookings.svg" class="btn-icon" alt="Delete" />
-        </button>
+      <div class="card-footer" :class="{ 'user-footer': !isAdmin }">
+        <template v-if="isAdmin">
+          <button class="action-btn edit" @click="$emit('edit', activity)">
+            <span>Modify</span>
+          </button>
+          <button class="action-btn attendees" @click="$emit('view-attendees', activity)">
+            <span>Attendees</span>
+          </button>
+          <button class="action-btn delete" @click="$emit('delete', activity.id)">
+            <img src="@/assets/icons/trash.svg" class="btn-icon" alt="Delete" />
+          </button>
+        </template>
+        
+        <template v-else>
+          <button 
+            v-if="!isBooked"
+            class="action-btn book" 
+            @click="$emit('book', activity)"
+            :disabled="isFull"
+          >
+            <span>{{ isFull ? 'Activity Full' : 'Book Now' }}</span>
+          </button>
+          <button 
+            v-else
+            class="action-btn cancel-booking" 
+            @click="$emit('cancel', activity)"
+          >
+            <span>Cancel Reservation</span>
+          </button>
+        </template>
       </div>
     </div>
   </div>
@@ -58,6 +79,14 @@ export default {
     activity: {
       type: Object,
       required: true
+    },
+    isAdmin: {
+      type: Boolean,
+      default: true
+    },
+    isBooked: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -71,6 +100,10 @@ export default {
       if (!this.activity.capacity) return 0;
       const users = this.activity.users ? this.activity.users.length : 0;
       return Math.min((users / this.activity.capacity) * 100, 100);
+    },
+    isFull() {
+      const users = this.activity.users ? this.activity.users.length : 0;
+      return users >= this.activity.capacity;
     }
   },
   methods: {
@@ -188,11 +221,11 @@ export default {
 }
 
 .card-body {
-  padding: 1.5rem;
+  padding: 1.2rem 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1rem;
 }
 
 .card-info {
@@ -217,7 +250,7 @@ export default {
 .card-metrics {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .metric {
@@ -272,18 +305,75 @@ export default {
 }
 
 .action-btn.edit {
-  flex: 1;
-  padding: 0.8rem;
   background: rgba(139, 92, 246, 0.1);
-  color: #a78bfa;
-  font-weight: 700;
-  font-size: 0.9rem;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #8b5cf6;
+  flex: 1;
+  padding: 0.8rem; /* Added back padding */
+  font-weight: 700; /* Added back font-weight */
+  font-size: 0.9rem; /* Added back font-size */
 }
 
 .action-btn.edit:hover {
   background: #8b5cf6;
   color: white;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+}
+
+.action-btn.attendees {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  flex: 1;
+  padding: 0.8rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.action-btn.attendees:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.action-btn.book {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  color: white;
+  width: 100%;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 0.8rem; /* Added padding for consistency */
+  font-size: 0.9rem; /* Added font-size for consistency */
+}
+
+.action-btn.book:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+}
+
+.action-btn.book:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: not-allowed;
+}
+
+.action-btn.cancel-booking {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  width: 100%;
+  font-weight: 700;
+  padding: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.action-btn.cancel-booking:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: rgba(239, 68, 68, 1);
+  box-shadow: none;
+  transform: translateY(-2px);
 }
 
 .action-btn.delete {

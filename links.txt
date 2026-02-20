@@ -4,3 +4,4 @@ UI: https://www.behance.net/gallery/223204583/Your-Music-Your-Mood-AI-Powered-Pl
 DateTime Python: https://www.ionos.es/digitalguide/paginas-web/desarrollo-web/python-datetime/
 DateTiime Mongo: https://www.mongodb.com/docs/manual/reference/method/Date/
 Mi API en Flask: https://github.com/adrianoelguapo/back_python_vercel/blob/master/api/index.py
+Filtros en CSS: https://www.inicionet.com/como-aplicar-filtros-a-una-imagen-con-css/
