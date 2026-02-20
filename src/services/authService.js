@@ -89,7 +89,7 @@ export default {
 
       }
 
-      // Guardar token y usuario en localStorage
+      /* --- Guardar token y usuario en LocalStorage --- */
       localStorage.setItem('token', data.token)
       localStorage.setItem('user', JSON.stringify(data.user))
 
@@ -103,7 +103,7 @@ export default {
 
   },
 
-  // Logout user
+  /* --- Cuando el usuario cierra sesión, se elimina el usuario y el token del LocalStorage --- */
   logout() {
 
     localStorage.removeItem('token')
@@ -111,7 +111,7 @@ export default {
 
   },
 
-  // Get current user from localStorage
+  /* --- Obtener el usuario actual del LocalStorage --- */
   getCurrentUser() {
 
     const userStr = localStorage.getItem('user')
@@ -119,14 +119,14 @@ export default {
     
   },
 
-  // Get token from localStorage
+  /* --- Obtener el token del LocalStorage --- */
   getToken() {
 
     return localStorage.getItem('token')
 
   },
 
-  // Check if user is authenticated
+  /* --- Verificar si el usuario está autenticado --- */
   isAuthenticated() {
 
     return !!this.getToken()
