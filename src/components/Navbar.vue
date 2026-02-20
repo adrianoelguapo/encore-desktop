@@ -1,30 +1,30 @@
 <template>
 
   <!-- Navigation Bar -->
-  <div class="navigation-container">
+  <div class = "navigation-container">
 
-    <nav class="navigation-bar">
+    <nav class = "navigation-bar">
 
-      <div class="navigation-wrapper">
+      <div class = "navigation-wrapper">
 
-        <router-link to="/" class="logo-link">
+        <router-link to = "/" class = "logo-link">
 
-            <h1 class="logo-text">Encore Festival</h1>
+            <h1 class = "logo-text">Encore Festival</h1>
 
         </router-link>
         
-        <div class="auth-buttons-group">
+        <div class = "auth-buttons-group">
 
-          <template v-if="isAuthenticated">
+          <template v-if = "isAuthenticated">
 
-            <button @click="handleLogout" class="logout-button">Log Out</button>
+            <button @click = "handleLogout" class = "logout-button">Log Out</button>
 
           </template>
 
           <template v-else>
 
-            <router-link to="/login" class="login-button">Log In</router-link>
-            <router-link to="/register" class="register-button">Register</router-link>
+            <router-link to = "/login" class = "login-button">Log In</router-link>
+            <router-link to = "/register" class = "register-button">Register</router-link>
 
           </template>
 

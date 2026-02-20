@@ -1,26 +1,26 @@
 <template>
 
-  <div v-if="visible" class="modal-overlay" @click.self="$emit('cancel')">
+  <div v-if = "visible" class = "modal-overlay" @click.self = "$emit('cancel')">
 
-    <div class="modal-container">
+    <div class = "modal-container">
 
-      <div class="modal-header">
+      <div class = "modal-header">
 
-        <h2 class="modal-title">{{ title }}</h2>
-        <button class="close-btn" @click="$emit('cancel')">×</button>
-
-      </div>
-      
-      <div class="modal-body">
-
-        <p class="modal-message">{{ message }}</p>
+        <h2 class = "modal-title">{{ title }}</h2>
+        <button class = "close-btn" @click = "$emit('cancel')">×</button>
 
       </div>
       
-      <div class="modal-footer">
+      <div class = "modal-body">
 
-        <button class="btn btn-secondary" @click="$emit('cancel')">Cancel</button>
-        <button class="btn btn-danger" @click="$emit('confirm')">Confirm</button>
+        <p class = "modal-message">{{ message }}</p>
+
+      </div>
+      
+      <div class = "modal-footer">
+
+        <button class = "btn btn-secondary" @click = "$emit('cancel')">Cancel</button>
+        <button class = "btn btn-danger" @click = "$emit('confirm')">Confirm</button>
 
       </div>
 
