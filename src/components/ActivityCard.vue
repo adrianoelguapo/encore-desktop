@@ -176,7 +176,15 @@ export default {
     formatDate(dateString) {
 
       if (!dateString) return '';
-      const date = new Date(dateString);
+      
+      let dateValue = dateString;
+      if (typeof dateString === 'string' && !dateString.includes('Z') && !dateString.includes('+')) {
+
+        dateValue += 'Z';
+
+      }
+
+      const date = new Date(dateValue);
 
       return date.toLocaleDateString(undefined, { 
 
@@ -193,7 +201,14 @@ export default {
 
       if (!dateString) return '';
 
-      const date = new Date(dateString);
+      let dateValue = dateString;
+      if (typeof dateString === 'string' && !dateString.includes('Z') && !dateString.includes('+')) {
+
+        dateValue += 'Z';
+
+      }
+
+      const date = new Date(dateValue);
       return date.toLocaleTimeString(undefined, { 
 
         hour: '2-digit', 

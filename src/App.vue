@@ -10,8 +10,8 @@
       <!-- --- Transición entre las vistas --- -->
       <transition name = "page" mode = "in-out">
 
-        <!-- --- Componente (es dinámico) --- -->
-        <component :is = "Component" />
+        <!-- --- Vista actual --- -->
+        <component :is = "Component"/>
 
       </transition>
 
@@ -29,6 +29,7 @@ export default {
   name: 'App'
 
 }
+
 </script>
 
 <!-- --- Estilos generales de la aplicación --- -->

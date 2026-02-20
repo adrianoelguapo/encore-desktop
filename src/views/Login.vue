@@ -47,14 +47,14 @@
           <button type = "submit" class = "action-button">Log In</button>
 
           <!-- --- Si salta un error, se muestra el mensaje --- -->
-          <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+          <p v-if = "errorMessage" class = "error-message">{{ errorMessage }}</p>
 
         </form>
 
         <!-- --- Footer --- -->
         <div class = "auth-footer">
 
-          <p class = "footer-message">Don't have an account? <router-link to="/register" class="link-text">Sign up here</router-link></p>
+          <p class = "footer-message">Don't have an account? <router-link to = "/register" class = "link-text">Sign up here</router-link></p>
 
         </div>
 

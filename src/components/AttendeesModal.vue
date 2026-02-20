@@ -27,7 +27,7 @@
 
             <div class = "attendee-icon">
 
-              <img src="@/assets/icons/users.svg" alt="User"/>
+              <img src = "@/assets/icons/users.svg" alt = "User"/>
 
             </div>
 

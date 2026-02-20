@@ -703,13 +703,10 @@ export default {
           /* --- Se obtiene la respuesta en formato JSON --- */
           const data = await response.json()
 
-          /* --- Se actualiza el perfil del usuario --- */
-          const updatedUser = { ...this.user, ...data.user }
+          /* --- Se actualiza el perfil del usuario en memoria --- */
+          const updatedUser = authService.updateCurrentUser(data.user)
 
-          /* --- Se actualiza el perfil del usuario en el localStorage --- */
-          localStorage.setItem('user', JSON.stringify(updatedUser))
-
-          /* --- Se actualiza el perfil del usuario --- */
+          /* --- Se actualiza la variable local para que se reflejen los cambios en la vista --- */
           this.user = updatedUser
 
           /* --- Se muestra mensaje de éxito en el modal de mensajes --- */

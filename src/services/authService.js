@@ -1,6 +1,10 @@
 /* --- URL en la que escucha el backend --- */
 const API_BASE_URL = 'http://localhost:5000/api'
 
+/* --- Almacenamiento en memoria (se pierde al refrescar) --- */
+let _token = null
+let _currentUser = null
+
 export default {
 
   /* --- Método que maneja el login --- */
@@ -37,9 +41,9 @@ export default {
 
       }
 
-      /* --- Se guarda el token y el usuario en localStorage --- */
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('user', JSON.stringify(data.user))
+      /* --- Se guarda el token y el usuario en memoria --- */
+      _token = data.token
+      _currentUser = data.user
 
       /* --- Se devuelve el usuario y el token --- */
       return { success: true, user: data.user }
@@ -89,9 +93,9 @@ export default {
 
       }
 
-      /* --- Guardar token y usuario en LocalStorage --- */
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('user', JSON.stringify(data.user))
+      /* --- Se guarda el token y el usuario en memoria --- */
+      _token = data.token
+      _currentUser = data.user
 
       return { success: true, user: data.user }
 
@@ -103,33 +107,40 @@ export default {
 
   },
 
-  /* --- Cuando el usuario cierra sesión, se elimina el usuario y el token del LocalStorage --- */
+  /* --- Cuando el usuario cierra sesión, se eliminan los datos de la memoria --- */
   logout() {
 
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
+    _token = null
+    _currentUser = null
 
   },
 
-  /* --- Obtener el usuario actual del LocalStorage --- */
+  /* --- Se obtiene el usuario actual de la memoria --- */
   getCurrentUser() {
 
-    const userStr = localStorage.getItem('user')
-    return userStr ? JSON.parse(userStr) : null
+    return _currentUser
     
   },
 
-  /* --- Obtener el token del LocalStorage --- */
-  getToken() {
+  /* --- Se actualizan los datos del usuario en memoria (ej: tras editar perfil) --- */
+  updateCurrentUser(userData) {
 
-    return localStorage.getItem('token')
+    _currentUser = { ..._currentUser, ...userData }
+    return _currentUser
 
   },
 
-  /* --- Verificar si el usuario está autenticado --- */
+  /* --- Se obtiene el token de la memoria --- */
+  getToken() {
+
+    return _token
+
+  },
+
+  /* --- Se verifica si el usuario está autenticado --- */
   isAuthenticated() {
 
-    return !!this.getToken()
+    return !!_token
 
   }
 

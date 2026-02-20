@@ -172,16 +172,23 @@ export default {
 
       if (!isoString) return '';
 
-      const date = new Date(isoString);
+      /* --- Si la fecha no tiene zona horaria ni desfase, le añadimos 'Z' para que se trate como UTC --- */
+      let dateValue = isoString;
+      if (typeof isoString === 'string' && !isoString.includes('Z') && !isoString.includes('+') && !isoString.match(/-\d{2}:\d{2}$/)) {
+
+        dateValue += 'Z';
+
+      }
+
+      const date = new Date(dateValue);
       if (isNaN(date.getTime())) return '';
       
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
+      /* --- Ajustamos la fecha restando el desfase local para obtener la cadena ISO local --- */
+      /* --- datetime-local espera YYYY-MM-DDTHH:MM en hora local --- */
+      const offset = date.getTimezoneOffset() * 60000;
+      const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 16);
       
-      return `${year}-${month}-${day}T${hours}:${minutes}`;
+      return localISOTime;
 
     },
 
