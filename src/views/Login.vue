@@ -30,7 +30,7 @@
           <!-- --- Input para el nombre de usuario --- -->
           <div class = "floating-input-group">
 
-            <input id = "username" type = "text" class = "floating-input" placeholder = " " v-model = "username" required/>
+            <input id = "username" type = "text" class = "floating-input" placeholder = " " v-model = "username"/>
             <label for = "username" class = "floating-label">Username</label>
 
           </div>
@@ -38,7 +38,7 @@
           <!-- --- Input para la contraseña --- -->
           <div class = "floating-input-group">
 
-            <input id = "password" type = "password" class = "floating-input" placeholder = " " v-model = "password" required/>
+            <input id = "password" type = "password" class = "floating-input" placeholder = " " v-model = "password"/>
             <label for = "password" class = "floating-label">Password</label>
 
           </div>
@@ -72,10 +72,19 @@
 <!-- --- Lógica de la vista --- -->
 <script>
 
-/* --- Importar componentes y el servicio de autenticación --- */
+/* --- Importar componentes, el servicio de autenticación y Zod (PARA ROBER) --- */
 import Navbar from '@/components/Navbar.vue'
 import BackgroundEffects from '@/components/BackgroundEffects.vue'
 import authService from '@/services/authService'
+import { z } from 'zod'
+
+/* --- Definir el esquema para el Login --- */
+const loginSchema = z.object({
+
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required")
+
+})
 
 /* --- Exportar la vista --- */
 export default {
@@ -113,10 +122,26 @@ export default {
       /* --- Se inicia una variable para guardar el mensaje de error en caso de que salte alguno --- */
       this.errorMessage = ''
 
-      /* --- Se llama al método de registro en el service de autenticación --- */
+      /* --- Validar con Zod antes de llamar al backend --- */
+      const resultValidation = loginSchema.safeParse({
+
+        username: this.username,
+        password: this.password
+
+      })
+
+      /* --- Si falla la validación, mostramos el primer error y cortamos la ejecución --- */
+      if (!resultValidation.success) {
+
+        this.errorMessage = resultValidation.error.issues[0].message
+        return
+
+      }
+
+      /* --- Se llama al método de login en el service de autenticación --- */
       const result = await authService.login(this.username, this.password)
       
-      /* --- Si el registro es exitoso, se redirige a un dashboard dependiendo del rol de usuario (admin o user) --- */
+      /* --- Si el login es exitoso, se redirige a un dashboard dependiendo del rol de usuario (admin o user) --- */
       if (result.success) {
 
         if (result.user.role === 'admin') {
@@ -131,13 +156,17 @@ export default {
 
       } else {
 
-        /* --- Si el registro falla en algún punto, se muestra el mensaje de error --- */
+        /* --- Si el login falla en algún punto, se muestra el mensaje de error --- */
         this.errorMessage = result.error
         
       }
+
     }
+
   }
+
 }
+
 </script>
 
 <!-- --- Estilos de la vista --- -->

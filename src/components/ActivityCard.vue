@@ -8,13 +8,6 @@
 
       <div class = "image-overlay"></div>
 
-      <div class = "status-indicator" :class = "activity.state">
-
-        <span class = "pulse-dot"></span>
-        {{ activity.state === 'active' ? 'Live' : 'Draft' }}
-
-      </div>
-
     </div>
     
     <div class = "card-body">
@@ -287,50 +280,6 @@ export default {
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, transparent 0%, rgba(18, 12, 29, 0.8) 100%);
-
-}
-
-.status-indicator {
-
-  position: absolute;
-  top: 1rem;
-  right: 1.2rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 100px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 2;
-
-}
-
-.status-indicator.active {
-
-  background: rgba(52, 211, 153, 0.15);
-  color: #34d399;
-
-}
-
-.status-indicator.inactive {
-
-  background: rgba(248, 113, 113, 0.15);
-  color: #f87171;
-
-}
-
-.pulse-dot {
-
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 0 rgba(255, 255, 255, 0.4);
 
 }
 

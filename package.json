@@ -12,7 +12,8 @@
     "core-js": "^3.8.3",
     "nodemon": "^3.1.11",
     "vue": "^3.2.13",
-    "vue-router": "^4.6.4"
+    "vue-router": "^4.6.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

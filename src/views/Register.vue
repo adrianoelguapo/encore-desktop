@@ -25,12 +25,12 @@
         </div>
 
         <!-- --- Formulario de registro --- -->
-        <form class = "open-form" @submit.prevent="handleRegister">
+        <form class = "open-form" @submit.prevent = "handleRegister">
 
           <!-- --- Input para el nombre --- -->
           <div class = "floating-input-group">
 
-            <input id = "name" type = "text" class = "floating-input" placeholder = " " v-model = "name" required/>
+            <input id = "name" type = "text" class = "floating-input" placeholder = " " v-model = "name"/>
             <label for = "name" class = "floating-label">Full Name</label>
 
           </div>
@@ -38,7 +38,7 @@
           <!-- --- Input para el nombre de usuario --- -->
           <div class = "floating-input-group">
 
-            <input id = "username" type = "text" class = "floating-input" placeholder = " " v-model = "username" required/>
+            <input id = "username" type = "text" class = "floating-input" placeholder = " " v-model = "username"/>
             <label for = "username" class = "floating-label">Username</label>
 
           </div>
@@ -46,7 +46,7 @@
           <!-- --- Input para la contraseña --- -->
           <div class = "floating-input-group">
 
-            <input id = "password" type = "password" class = "floating-input" placeholder = " " v-model = "password" required/>
+            <input id = "password" type = "password" class = "floating-input" placeholder = " " v-model = "password"/>
             <label for = "password" class = "floating-label">Password</label>
 
           </div>
@@ -54,7 +54,7 @@
           <!-- --- Input para confirmar la contraseña --- -->
           <div class = "floating-input-group">
 
-            <input id = "confirm-password" type = "password" class = "floating-input" placeholder = " " v-model = "confirmPassword" required/>
+            <input id = "confirm-password" type = "password" class = "floating-input" placeholder = " " v-model = "confirmPassword"/>
             <label for = "confirm-password" class = "floating-label">Confirm Password</label>
 
           </div>
@@ -88,10 +88,27 @@
 <!-- --- Lógica de la vista --- -->
 <script>
 
-/* --- Importar componentes y el servicio de autenticación --- */
+/* --- Importar componentes, el servicio de autenticación y Zod (PARA ROBER) --- */
 import Navbar from '@/components/Navbar.vue'
 import BackgroundEffects from '@/components/BackgroundEffects.vue'
 import authService from '@/services/authService'
+import { z } from 'zod'
+
+/* --- Definir el esquema para el Registro --- */
+const registerSchema = z.object({
+
+  name: z.string().min(1, "Name is required"),
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
+  confirmPassword: z.string()
+
+}).refine((data) => data.password === data.confirmPassword, {
+
+  /* --- Esto asocia el error al campo confirmPassword --- */
+  message: "Passwords do not match",
+  path: ["confirmPassword"]
+
+})
 
 /* --- Exportar la vista --- */
 export default {
@@ -130,6 +147,24 @@ export default {
 
       /* --- Se inicia una variable para guardar el mensaje de error en caso de que salte alguno --- */
       this.errorMessage = ''
+
+      /* --- Validar con Zod antes de llamar al backend --- */
+      const resultValidation = registerSchema.safeParse({
+
+        name: this.name,
+        username: this.username,
+        password: this.password,
+        confirmPassword: this.confirmPassword
+
+      })
+
+      /* --- Si falla la validación, mostramos el primer error de la lista y cortamos la ejecución --- */
+      if (!resultValidation.success) {
+
+        this.errorMessage = resultValidation.error.issues[0].message
+        return
+
+      }
 
       /* --- Se llama al método de registro en el service de autenticación --- */
       const result = await authService.register(this.name, this.username, this.password)
