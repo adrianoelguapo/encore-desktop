@@ -73,17 +73,27 @@
         
         <template v-else>
 
-          <button v-if = "!isBooked" class = "action-btn book" @click = "$emit('book', activity)" :disabled = "isFull">
+          <button v-if = "isFinished" class = "action-btn finished" disabled>
 
-            <span>{{ isFull ? 'Activity Full' : 'Book Now' }}</span>
-
-          </button>
-
-          <button v-else class = "action-btn cancel-booking" @click = "$emit('cancel', activity)">
-
-            <span>Cancel Reservation</span>
+            <span>Finished</span>
 
           </button>
+
+          <template v-else>
+
+            <button v-if = "!isBooked" class = "action-btn book" @click = "$emit('book', activity)" :disabled = "isFull">
+
+              <span>{{ isFull ? 'Activity Full' : 'Book Now' }}</span>
+
+            </button>
+
+            <button v-else class = "action-btn cancel-booking" @click = "$emit('cancel', activity)">
+
+              <span>Cancel Reservation</span>
+
+            </button>
+
+          </template>
 
         </template>
 
@@ -152,6 +162,12 @@ export default {
 
       const users = this.activity.users ? this.activity.users.length : 0;
       return users >= this.activity.capacity;
+
+    },
+
+    isFinished() {
+
+      return this.activity.state === 'finished';
 
     }
 
@@ -489,6 +505,21 @@ export default {
   justify-content: center;
   background: rgba(239, 68, 68, 0.1);
   border-color: rgba(239, 68, 68, 0.2);
+
+}
+
+.action-btn.finished {
+
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  font-weight: 700;
+  padding: 0.8rem;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
 }
 

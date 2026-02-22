@@ -268,7 +268,7 @@
                 <input id = "profile-password" type = "password" class = "floating-input" placeholder = " " v-model="profileForm.password"/>
 
                 <!-- --- Label --- -->
-                <label for = "profile-password" class="floating-label">New Password (leave blank to keep current)</label>
+                <label for = "profile-password" class = "floating-label">Current or New Password</label>
 
               </div>
 
