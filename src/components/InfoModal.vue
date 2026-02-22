@@ -1,11 +1,16 @@
+<!-- --- Estructura del modal de mensajes informativos --- -->
 <template>
 
+  <!-- --- Si el modal está visible, se muestra su contenido --- -->
   <div v-if = "visible" class = "modal-overlay" @click.self = "$emit('close')">
 
+    <!-- --- Contenedor principal del modal --- -->
     <div class = "modal-container">
 
+      <!-- --- Header --- -->
       <div class = "modal-header">
 
+        <!-- --- Icono informativo (exclamación para un error, i para un mensaje de información) --- -->
         <div class = "header-icon" :class = "type">
 
           <span v-if = "type === 'error'">!</span>
@@ -13,18 +18,23 @@
 
         </div>
 
+        <!-- --- Título del modal --- -->
         <h2 class = "modal-title">{{ title }}</h2>
 
       </div>
       
+      <!-- --- Cuerpo del modal --- -->
       <div class = "modal-body">
 
+        <!-- --- Contenido del modal --- -->
         <p class = "message">{{ message }}</p>
 
       </div>
       
+      <!-- --- Footer --- -->
       <div class = "modal-footer">
 
+        <!-- --- Botón de aceptar --- -->
         <button class = "btn btn-primary" @click = "$emit('close')">Accept</button>
 
       </div>
@@ -35,14 +45,19 @@
 
 </template>
 
+<!-- --- Lógica del componente --- -->
 <script>
 
+/* --- Exportación del componente --- */
 export default {
 
+  /* --- Nombre del componente --- */
   name: 'InfoModal',
 
+  /* --- Atributos que se le pasan al componente --- */
   props: {
 
+    /* --- Si es visible o no --- */
     visible: {
 
       type: Boolean,
@@ -50,6 +65,7 @@ export default {
 
     },
 
+    /* --- Título del modal --- */
     title: {
 
       type: String,
@@ -57,6 +73,7 @@ export default {
 
     },
 
+    /* --- Mensaje del modal --- */
     message: {
 
       type: String,
@@ -64,10 +81,11 @@ export default {
 
     },
 
+    /* --- Tipo del modal --- */
     type: {
 
       type: String,
-      default: 'info' // 'info' or 'error'
+      default: 'info' /* --- info por defecto pero puede cambiar a error --- */
 
     }
 
@@ -77,8 +95,10 @@ export default {
 
 </script>
 
+<!-- --- Estilos del componente --- -->
 <style scoped>
 
+/* --- Estilos para el difuminar el fondo y que el modal quede por encima y centrado --- */
 .modal-overlay {
 
   position: fixed;
@@ -96,6 +116,7 @@ export default {
 
 }
 
+/* --- Contenedor principal --- */
 .modal-container {
 
   background: #120c1d;
@@ -114,6 +135,7 @@ export default {
 
 }
 
+/* --- Header --- */
 .modal-header {
 
   margin-bottom: 1.5rem;
@@ -152,6 +174,7 @@ export default {
 
 }
 
+/* --- Título --- */
 .modal-title {
 
   font-size: 1.5rem;
@@ -162,6 +185,7 @@ export default {
 
 }
 
+/* --- Contenido --- */
 .modal-body {
 
   margin-bottom: 2rem;
@@ -176,12 +200,14 @@ export default {
 
 }
 
+/* --- Footer --- */
 .modal-footer {
 
   width: 100%;
 
 }
 
+/* --- Botón de aceptar --- */
 .btn {
 
   width: 100%;
@@ -211,6 +237,7 @@ export default {
 
 }
 
+/* --- Animación para el difuminado del fondo --- */
 @keyframes fadeIn {
 
   from { opacity: 0; }
@@ -219,6 +246,7 @@ export default {
 
 }
 
+/* --- Animación para el movimiento del modal --- */
 @keyframes slideUp {
 
   from { transform: translateY(20px); opacity: 0; }

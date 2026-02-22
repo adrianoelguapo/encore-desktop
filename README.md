@@ -1,24 +1,15 @@
-# encore-desktop
+# ENCORE FESTIVAL - ESCRITORIO
 
-## Project setup
-```
-npm install
-```
+Esta es la versión de escritorio de la aplicación del festival Encore. Esta aplicación permite a los usuarios ver los horarios de los conciertos y reservar entradas para los mismos.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Tecnologías
 
-### Compiles and minifies for production
-```
-npm run build
-```
+Para este proyecto se han utilizado las siguientes tecnologías para crear una aplicación que cumpla con los requisitos impuestos:
 
-### Lints and fixes files
-```
-npm run lint
-```
+- **Electron**: Framework para crear aplicaciones de escritorio utilizando Chromium y Node.js para funcionar.
+- **Vue**: Framework para crear la UI.
+- **MongoDB**: Base de datos no relacional para guardar los datos.
+- **Node.js**: Entorno de ejecución.
+- **npm**: Gestor de paquetes.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Vistas de la Aplicación

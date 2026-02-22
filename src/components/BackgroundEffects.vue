@@ -1,24 +1,33 @@
+<!-- --- Estructura del componente de efectos de fondo --- -->
 <template>
 
+  <!-- --- Contenedor de efectos de fondo --- -->
   <div class = "background-effects">
 
+    <!-- --- Efecto 1 --- -->
     <div class = "purple-glow glow-top-right"></div>
+
+    <!-- --- Efecto 2 --- -->
     <div class = "purple-glow glow-bottom-left"></div>
 
   </div>
 
 </template>
 
+<!-- --- Lógica del componente --- -->
 <script>
 
+/* --- Exportación el componente --- */
 export default {
 
+  /* --- Nombre del componente --- */
   name: 'BackgroundEffects'
 
 }
 
 </script>
 
+<!-- --- Estilos del componente --- -->
 <style scoped>
 
 .background-effects {
@@ -66,6 +75,7 @@ export default {
 
 }
 
+/* --- Animación para simular una especie de latido para los elementos --- */
 @keyframes glow-pulse {
 
   0%, 100% {

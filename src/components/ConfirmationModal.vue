@@ -1,9 +1,13 @@
+<!-- --- Estructura del modal para confirmaciones --- -->
 <template>
 
+  <!-- --- Si el modal está visible, se muestra su contenido --- -->
   <div v-if = "visible" class = "modal-overlay" @click.self = "$emit('cancel')">
 
+    <!-- --- Contenedor principal del modal --- -->
     <div class = "modal-container">
 
+      <!-- --- Header --- -->
       <div class = "modal-header">
 
         <h2 class = "modal-title">{{ title }}</h2>
@@ -11,15 +15,21 @@
 
       </div>
       
+      <!-- --- Cuerpo del modal --- -->
       <div class = "modal-body">
 
+        <!-- --- Contenido del modal --- -->
         <p class = "modal-message">{{ message }}</p>
 
       </div>
       
+      <!-- --- Footer --- -->
       <div class = "modal-footer">
 
+        <!-- --- Botón de cancelar --- -->
         <button class = "btn btn-secondary" @click = "$emit('cancel')">Cancel</button>
+
+        <!-- --- Botón de confirmar --- -->
         <button class = "btn btn-danger" @click = "$emit('confirm')">Confirm</button>
 
       </div>
@@ -30,14 +40,18 @@
 
 </template>
 
+<!-- --- Lógica del componente --- -->
 <script>
 
+/* --- Exporta el componente --- */
 export default {
 
   name: 'ConfirmationModal',
 
+  /* --- Atributos que se le pasan al componente --- */
   props: {
 
+    /* --- Si es visible o no --- */
     visible: {
 
       type: Boolean,
@@ -45,6 +59,7 @@ export default {
 
     },
 
+    /* --- Título del modal --- */
     title: {
 
       type: String,
@@ -52,6 +67,7 @@ export default {
 
     },
 
+    /* --- Mensaje del modal --- */
     message: {
 
       type: String,
@@ -64,8 +80,10 @@ export default {
 }
 </script>
 
+<!-- --- Estilos del componente --- -->
 <style scoped>
 
+/* --- Estilos para el difuminar el fondo y que el modal quede por encima y centrado --- */
 .modal-overlay {
 
   position: fixed;
@@ -83,6 +101,7 @@ export default {
 
 }
 
+/* --- Contenedor principal del modal --- */
 .modal-container {
 
   background: #1a1a2e; /* Dark solid background */
@@ -97,6 +116,7 @@ export default {
 
 }
 
+/* --- Header --- */
 .modal-header {
 
   padding: 1.25rem 1.5rem;
@@ -109,6 +129,7 @@ export default {
 
 }
 
+/* --- Título del modal --- */
 .modal-title {
 
   font-size: 1.25rem;
@@ -118,6 +139,7 @@ export default {
 
 }
 
+/* --- Botón de cerrar --- */
 .close-btn {
 
   background: transparent;
@@ -136,6 +158,7 @@ export default {
 
 }
 
+/* --- Cuerpo del modal --- */
 .modal-body {
 
   padding: 1.5rem;
@@ -151,6 +174,7 @@ export default {
 
 }
 
+/* --- Footer --- */
 .modal-footer {
 
   padding: 1rem 1.5rem;
@@ -162,6 +186,7 @@ export default {
 
 }
 
+/* --- Botones --- */
 .btn {
 
   padding: 0.6rem 1.25rem;
@@ -206,6 +231,7 @@ export default {
 
 }
 
+/* --- Animación para el difuminado del fondo --- */
 @keyframes fadeIn {
 
   from { opacity: 0; }
@@ -214,6 +240,7 @@ export default {
 
 }
 
+/* --- Animación para el movimiento del modal --- */
 @keyframes slideUp {
 
   from { transform: translateY(20px); opacity: 0; }

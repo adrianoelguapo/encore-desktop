@@ -1,19 +1,27 @@
+<!-- --- Estructura de la vista del panel de admin --- -->
 <template>
 
+<!-- --- Contenedor principal --- -->
   <div class = "admin-container">
 
+    <!-- --- Contenedor principal de la barra de navegación lateral --- -->
     <aside class = "admin-sidebar">
 
+      <!-- --- Barra de navegación --- -->
       <nav class = "sidebar-nav">
 
+        <!-- --- Botones de navegación (se recorre el array de tabs definido en el atributo data y se crea un botón para cada tab) --- -->
         <button v-for = "tab in tabs" :key = "tab.id" @click = "activeTab = tab.id" :class = "['nav-icon-btn', { active: activeTab === tab.id }]" :title = "tab.label">
 
+          <!-- --- Icono del botón --- -->
           <img :src = "tab.icon" :alt = "tab.label" class = "nav-icon" />
 
         </button>
 
+        <!-- --- Botón de cerrar sesión --- -->
         <button @click = "handleLogout" class = "nav-icon-btn logout-btn" title = "Log Out">
 
+          <!-- --- Icono del botón --- -->
           <img src = "@/assets/icons/log-out.svg" alt = "Log Out" class = "nav-icon" />
 
         </button>
@@ -22,88 +30,117 @@
 
     </aside>
 
+    <!-- --- Contenedor principal del contenido --- -->
     <main class = "admin-main">
 
+      <!-- --- Contenedor auxiliar para las tabs --- -->
       <div class = "content-wrapper">
         
-        <!-- Home Tab -->
+        <!-- --- Pestaña de inicio --- -->
         <div v-if = "activeTab === 'home'" class = "tab-content">
 
+          <!-- --- Header (título) --- -->
           <div class = "tab-header home-header">
 
             <h1 class = "tab-title">Overview</h1>
-            <p class = "tab-subtitle" v-if = "user">Welcome back, {{ user.username }}. Here's what's happening at Encore Festival.</p>
 
           </div>
-
+          
+          <!-- --- Sección de estadísticas --- -->
           <div class = "stats-section">
 
+            <!-- --- Título --- -->
             <h2 class = "section-subtitle">Stats</h2>
 
+            <!-- --- Cuadrícula para meter las cartas de cada stat --- -->
             <div class = "stats-grid">
 
+              <!-- --- Carta que indica el número de usuarios en la app --- -->
               <div class = "stat-card">
 
+                <!-- --- Icono de la carta --- -->
                 <div class = "stat-icon-wrapper users">
 
                   <img src = "@/assets/icons/users.svg" alt = "Users" class = "stat-icon"/>
 
                 </div>
 
+                <!-- --- Contenido de la carta --- -->
                 <div class = "stat-info">
 
+                   <!-- --- Título --- -->
                   <span class = "stat-label">Total Users</span>
+
+                  <!-- --- Número de usuarios --- -->
                   <span class = "stat-value">{{ userCount }}</span>
 
                 </div>
 
               </div>
 
+              <!-- --- Carta que indica el número de conciertos activos --- -->
               <div class = "stat-card">
 
+                <!-- --- Icono de la carta --- -->
                 <div class = "stat-icon-wrapper activities">
 
                   <img src = "@/assets/icons/concerts.svg" alt = "Concerts" class = "stat-icon"/>
 
                 </div>
 
+                <!-- --- Contenido de la carta --- -->
                 <div class = "stat-info">
 
+                  <!-- --- Título --- -->
                   <span class = "stat-label">Active Concerts</span>
+
+                  <!-- --- Número de conciertos activos --- -->
                   <span class = "stat-value">{{ activeActivitiesCount }}</span>
 
                 </div>
 
               </div>
 
+              <!-- --- Carta que indica el número de reservas --- -->
               <div class = "stat-card">
 
+                <!-- --- Icono de la carta --- -->
                 <div class = "stat-icon-wrapper bookings">
 
                   <img src = "@/assets/icons/bookings.svg" alt = "Bookings" class = "stat-icon"/>
 
                 </div>
 
+                <!-- --- Contenido de la carta --- -->
                 <div class = "stat-info">
 
+                  <!-- --- Título --- -->
                   <span class = "stat-label">Total Bookings</span>
+
+                  <!-- --- Número de reservas --- -->
                   <span class = "stat-value">{{ totalBookings }}</span>
 
                 </div>
 
               </div>
 
+              <!-- --- Carta que indica la capacidad total de los conciertos --- -->
               <div class = "stat-card">
 
+                <!-- --- Icono de la carta --- -->
                 <div class = "stat-icon-wrapper revenue">
 
                   <img src = "@/assets/icons/home.svg" alt = "Revenue" class = "stat-icon" />
 
                 </div>
 
+                <!-- --- Contenido de la carta --- -->
                 <div class = "stat-info">
 
+                  <!-- --- Título --- -->
                   <span class = "stat-label">Total Capacity</span>
+
+                  <!-- --- Capacidad total --- -->
                   <span class = "stat-value">{{ totalCapacity }}</span>
 
                 </div>
@@ -114,57 +151,78 @@
 
           </div>
 
+          <!-- --- Sección de acciones de acceso rápido --- -->
           <div class = "quick-actions-section">
 
+            <!-- --- Título --- -->
             <h2 class = "section-subtitle">Quick Actions</h2>
 
+            <!-- --- Cuadrícula para meter las cartas de cada acción --- -->
             <div class = "actions-grid">
 
+              <!-- --- Carta que permite crear un nuevo concierto --- -->
               <div class = "action-card" @click = "openCreateModal">
 
+                <!-- --- Icono de la carta --- -->
                 <div class = "action-icon">
 
                   <img src = "@/assets/icons/concerts.svg" class = "quick-icon" alt = "Create" />
 
                 </div>
 
+                <!-- --- Contenido de la carta --- -->
                 <div class = "action-details">
 
+                  <!-- --- Título --- -->
                   <span class = "action-name">Create New Concert</span>
+
+                  <!-- --- Descripción --- -->
                   <span class = "action-desc">Add a new event to the list</span>
 
                 </div>
 
               </div>
 
+              <!-- --- Carta que redirige a la pestaña de usuarios --- -->
               <div class = "action-card" @click = "activeTab = 'users'">
 
+                <!-- --- Icono de la carta --- -->
                 <div class = "action-icon">
 
                   <img src = "@/assets/icons/users.svg" class = "quick-icon" alt = "Users"/>
 
                 </div>
 
+                <!-- --- Contenido de la carta --- -->
                 <div class = "action-details">
 
+                  <!-- --- Título --- -->
                   <span class = "action-name">Manage Users</span>
+
+                  <!-- --- Descripción --- -->
                   <span class = "action-desc">View and edit user details</span>
 
                 </div>
 
               </div>
 
+              <!-- --- Carta que redirige a la pestaña de reservas --- -->
               <div class = "action-card" @click = "activeTab = 'bookings'">
 
+                <!-- --- Icono de la carta --- -->
                 <div class = "action-icon">
 
                   <img src = "@/assets/icons/bookings.svg" class = "quick-icon" alt = "Bookings"/>
 
                 </div>
 
+                <!-- --- Contenido de la carta --- -->
                 <div class = "action-details">
 
+                  <!-- --- Título --- -->
                   <span class = "action-name">View Bookings</span>
+
+                  <!-- --- Descripción --- -->
                   <span class = "action-desc">Check all active reservations</span>
 
                 </div>
@@ -177,43 +235,50 @@
 
         </div>
 
-        <!-- Concerts Tab -->
+        <!-- --- Pestaña de conciertos --- -->
         <div v-if = "activeTab === 'activities'" class = "tab-content">
 
+          <!-- --- Header --- -->
           <div class = "tab-header">
 
+            <!-- --- Título --- -->
             <h1 class = "tab-title">Concerts</h1>
 
-            <button class = "btn-create" @click = "openCreateModal">
-
-              <span class = "icon">+</span> Create Concert
-
-            </button>
+            <!-- --- Botón para crear un nuevo concierto --- -->
+            <button class = "btn-create" @click = "openCreateModal">Create Concert</button>
 
           </div>
           
+          <!-- --- Cuando los conciertos se están cargando, se muestra --- -->
           <div v-if = "loading" class = "loading-state">Loading concerts...</div>
           
+          <!-- --- Cuando no hay conciertos, se muestra --- -->
           <div v-else-if = "activities.length === 0" class = "empty-state">
 
             <p>No concerts found. Create your first one!</p>
 
           </div>
           
+          <!-- --- Cuando hay conciertos, se crea un grid para mostrarlos --- -->
           <div v-else class = "activities-grid">
 
+            <!-- --- Se recorren los conciertos y se crea una carta por cada uno --- -->
             <ActivityCard v-for = "activity in filteredActivities" :key = "activity.id" :activity = "activity" :isAdmin = "true" @edit = "handleEditActivity" @delete = "handleDeleteActivity" @view-attendees = "handleViewAttendees"/>
 
           </div>
           
         </div>
 
-        <!-- Usuarios Tab -->
+        <!-- --- Pestaña de usuarios --- -->
         <div v-if = "activeTab === 'users'" class = "tab-content">
 
+          <!-- --- Header --- -->
           <div class = "tab-header">
 
+            <!-- --- Título --- -->
             <h1 class = "tab-title">User Management</h1>
+
+            <!-- --- Buscador --- -->
             <div class = "header-actions">
 
               <input type = "text" v-model = "userSearchQuery" placeholder = "Search users..." class = "search-input"/>
@@ -222,10 +287,13 @@
 
           </div>
 
+          <!-- --- Contenedor para mostrar los usuarios --- -->
           <div class = "data-table-container">
 
+            <!-- --- Se mostrarán en una tabla --- -->
             <table class = "data-table">
 
+              <!-- --- Encabezados de la tabla --- -->
               <thead>
 
                 <tr>
@@ -239,20 +307,26 @@
 
               </thead>
 
+              <!-- --- Contenido de la tabla --- -->
               <tbody>
 
+                <!-- --- Se recorren los usuarios y se crea una fila por cada uno --- -->
                 <tr v-for = "user in filteredUsers" :key = "user.id">
 
+                  <!-- --- Nombre del usuario --- -->
                   <td>{{ user.name }}</td>
 
+                  <!-- --- Nombre de usuario --- -->
                   <td>@{{ user.username }}</td>
 
+                  <!-- --- Rol del usuario --- -->
                   <td>
 
                     <span class = "role-badge-minimal">{{ user.role }}</span>
 
                   </td>
                   
+                  <!-- --- Botones para modificar o eliminar el usuario --- -->
                   <td class = "action-cell">
 
                     <button class = "table-btn modify" @click = "handleEditUser(user)">Modify</button>
@@ -262,6 +336,7 @@
 
                 </tr>
 
+                <!-- --- Cuando no hay usuarios, se muestra --- -->
                 <tr v-if = "filteredUsers.length === 0">
 
                   <td colspan = "4" class = "empty-table">No users found</td>
@@ -276,13 +351,16 @@
 
         </div>
 
-        <!-- Reservas Tab -->
+        <!-- --- Pestaña de reservas --- -->
         <div v-if = "activeTab === 'bookings'" class = "tab-content">
 
+          <!-- --- Header --- -->
           <div class = "tab-header">
 
+            <!-- --- Título --- -->
             <h1 class = "tab-title">Bookings</h1>
 
+            <!-- --- Buscador --- -->
             <div class = "header-actions">
 
               <input type = "text" v-model = "bookingSearchQuery" placeholder = "Search by user or concert..." class = "search-input"/>
@@ -291,10 +369,13 @@
 
           </div>
 
+          <!-- --- Contenedor para mostrar las reservas --- -->
           <div class = "data-table-container">
 
+            <!-- --- Se mostrarán en una tabla --- -->
             <table class = "data-table">
 
+              <!-- --- Encabezados de la tabla --- -->
               <thead>
 
                 <tr>
@@ -309,10 +390,13 @@
 
               </thead>
 
+              <!-- --- Contenido de la tabla --- -->
               <tbody>
 
+                <!-- --- Se recorren las reservas y se crea una fila por cada una --- -->
                 <tr v-for = "booking in filteredBookings" :key = "booking.booked_at + booking.username">
 
+                  <!-- --- Usuario que reserva --- -->
                   <td>
 
                     <div class = "booking-user">
@@ -324,9 +408,13 @@
 
                   </td>
 
+                  <!-- --- Concierto reservado --- -->
                   <td>{{ booking.activity_name }}</td>
+
+                  <!-- --- Fecha de la reserva --- -->
                   <td>{{ formatDateShort(booking.booked_at) }}</td>
 
+                  <!-- --- Estado de la reserva --- -->
                   <td>
 
                     <span class = "status-badge-minimal">
@@ -337,6 +425,7 @@
 
                   </td>
 
+                  <!-- --- Botón para cancelar la reserva --- -->
                   <td>
 
                     <button class = "table-btn cancel" @click = "handleCancelBooking(booking)" v-if = "booking.activity_state !== 'cancel'">Cancel</button>
@@ -345,6 +434,7 @@
 
                 </tr>
 
+                <!-- --- Cuando no hay reservas, se muestra --- -->
                 <tr v-if = "filteredBookings.length === 0">
 
                   <td colspan = "5" class = "empty-table">No bookings found</td>
@@ -361,24 +451,31 @@
         
       </div>
 
+      <!-- --- Modal para crear o editar conciertos --- -->
       <ActivityModal :visible = "showActivityModal" :loading = "createLoading" :activityData = "selectedActivity" @close = "showActivityModal = false" @save = "handleSaveActivity" @error = "showInfo('Validation Error', $event, 'error')"/>
 
+      <!-- --- Modal de confirmación para eliminar conciertos --- -->
       <ConfirmationModal :visible = "showDeleteModal" title = "Delete Concert" message = "Are you sure you want to delete this concert? This action cannot be undone." @cancel = "showDeleteModal = false" @confirm = "confirmDeleteActivity"/>
 
+      <!-- --- Modal de información --- -->
       <InfoModal :visible = "infoModal.visible" :title = "infoModal.title" :message = "infoModal.message" :type = "infoModal.type" @close = "infoModal.visible = false"/>
 
+      <!-- --- Modal de confirmación para cancelar reservas --- -->
       <ConfirmationModal :visible = "showCancelBookingModal" title = "Cancel Booking" message = "Are you sure you want to cancel this user's reservation?" @confirm = "confirmCancelBooking" @cancel = "showCancelBookingModal = false"/>
 
+      <!-- --- Modal de confirmación para eliminar usuarios --- -->
       <ConfirmationModal :visible = "showDeleteUserModal" title = "Delete User" message = "Are you sure you want to delete this user? This will also cancel all their bookings and remove them from the system." @confirm = "confirmDeleteUser" @cancel = "showDeleteUserModal = false"/>
 
+      <!-- --- Modal para mostrar los asistentes a un concierto --- -->
       <AttendeesModal :visible = "showAttendeesModal" :activity = "selectedActivityForAttendees" :allUsers = "allUsers" @close = "showAttendeesModal = false"/>
 
+      <!-- --- Modal para editar usuarios --- -->
       <UserEditModal :visible = "showUserEditModal" :loading = "editUserLoading" :userData = "selectedUser" @close = "showUserEditModal = false" @save = "handleSaveUser"/>
 
     </main>
 
+    <!-- --- Efectos de fondo --- -->
     <BackgroundEffects/>
-
 
   </div>
 
@@ -386,6 +483,7 @@
 
 <script>
 
+/* --- Importar componentes y el servicio de autenticación --- */
 import BackgroundEffects from '@/components/BackgroundEffects.vue'
 import ActivityCard from '@/components/ActivityCard.vue'
 import ActivityModal from '@/components/ActivityModal.vue'
@@ -395,10 +493,13 @@ import InfoModal from '@/components/InfoModal.vue'
 import AttendeesModal from '@/components/AttendeesModal.vue'
 import authService from '@/services/authService'
 
+/* --- Exportar la vista --- */
 export default {
 
+  /* --- Nombre de la vista --- */
   name: 'AdminDashboardPage',
 
+  /* --- Componentes que utiliza --- */
   components: {
 
     BackgroundEffects,
@@ -411,94 +512,149 @@ export default {
 
   },
 
+  /* --- Estructura de datos de la vista --- */
   data() {
 
     return {
 
+      /* --- Usuario actual --- */
       user: null,
 
+      /* --- Pestaña activa --- */
       activeTab: 'home',
 
+      /* --- Pestañas del dashboard --- */
       tabs: [
+        
         { id: 'home', label: 'Home', icon: require('@/assets/icons/home.svg') },
         { id: 'activities', label: 'Concerts', icon: require('@/assets/icons/concerts.svg') },
         { id: 'users', label: 'Users', icon: require('@/assets/icons/users.svg') },
         { id: 'bookings', label: 'Bookings', icon: require('@/assets/icons/bookings.svg') }
+      
       ],
 
+      /* --- Conciertos --- */
       activities: [],
+
+      /* --- Modal de conciertos --- */
       showActivityModal: false,
+
+      /* --- Carga de conciertos --- */
       loading: false,
       createLoading: false,
+
+      /* --- Concierto seleccionado --- */
       selectedActivity: null,
+
+      /* --- Modal de eliminación de conciertos --- */
       showDeleteModal: false,
       activityToDelete: null,
+
+      /* --- Usuarios --- */
       allUsers: [],
+
+      /* --- Reservas --- */
       bookings: [],
+
+      /* --- Búsqueda de usuarios --- */
       userSearchQuery: '',
+
+      /* --- Búsqueda de reservas --- */
       bookingSearchQuery: '',
+
+      /* --- Modal de edición de usuarios --- */
       showUserEditModal: false,
+
+      /* --- Carga de edición de usuarios --- */
       editUserLoading: false,
+
+      /* --- Usuario seleccionado --- */
       selectedUser: null,
+
+      /* --- Modal de mensajes informativos --- */
       infoModal: {
+
         visible: false,
         title: '',
         message: '',
         type: 'info'
+
       },
+
+      /* --- Modal de asistentes a conciertos --- */
       showAttendeesModal: false,
       selectedActivityForAttendees: null,
+
+      /* --- Modal de cancelación de reservas --- */
       showCancelBookingModal: false,
       bookingToCancel: null,
+
+      /* --- Modal de eliminación de usuarios --- */
       showDeleteUserModal: false,
       userToDelete: null
+
     }
+
   },
 
+  /* --- Cuando la vista se carga --- */
   mounted() {
+
+    /* --- Pillar el nombre de usuario llamando al service de autenticación --- */
     this.user = authService.getCurrentUser()
     
-    // Verify user is admin
+    /* --- Si se encuentra el usuario y no es admin, redirigir al dashboard --- */
     if (!this.user || this.user.role !== 'admin') {
 
       this.$router.push('/dashboard')
 
     } else {
 
+      /* --- Obtener todos los conciertos --- */
       this.fetchActivities()
+
+      /* --- Obtener todos los usuarios --- */
       this.fetchAllUsers()
+
+      /* --- Obtener todas las reservas --- */
       this.fetchBookings()
 
     }
 
   },
 
+  /* --- Valores computadas --- */
   computed: {
 
+    /* --- Número de usuarios --- */
     userCount() {
 
       return this.allUsers.length
 
     },
 
+    /* --- Número de conciertos activos --- */
     activeActivitiesCount() {
 
       return this.activities.filter(a => a.state === 'active').length
 
     },
 
+    /* --- Número total de reservas --- */
     totalBookings() {
 
       return this.bookings.length
 
     },
 
+    /* --- Capacidad total de todos los conciertos --- */
     totalCapacity() {
 
       return this.activities.reduce((sum, a) => sum + (a.capacity || 0), 0)
 
     },
 
+    /* --- Usuarios filtrados por búsqueda --- */
     filteredUsers() {
 
       if (!this.userSearchQuery) return this.allUsers
@@ -512,6 +668,7 @@ export default {
 
     },
 
+    /* --- Reservas filtradas por búsqueda --- */
     filteredBookings() {
 
       if (!this.bookingSearchQuery) return this.bookings
@@ -525,6 +682,7 @@ export default {
 
     },
 
+    /* --- Conciertos filtrados por búsqueda --- */
     filteredActivities() {
 
       return this.activities
@@ -533,8 +691,10 @@ export default {
 
   },
 
+  /* --- Métodos --- */
   methods: {
 
+    /* --- Cerrar sesión --- */
     handleLogout() {
 
       authService.logout()
@@ -542,13 +702,18 @@ export default {
 
     },
 
+    /* --- Obtener todos los usuarios --- */
     async fetchAllUsers() {
 
       try {
 
+        /* --- Obtener el token llamando al service de autenticación --- */
         const token = authService.getToken()
+
+        /* --- Hacer la petición a la API --- */
         const response = await fetch('http://localhost:5000/api/users', {
 
+          /* --- Mandar el token en la petición --- */
           headers: {
 
             'Auth': `Bearer ${token}`
@@ -557,6 +722,7 @@ export default {
 
         })
         
+        /* --- Si la respuesta es correcta, guardar los usuarios --- */
         if (response.ok) {
 
           this.allUsers = await response.json()
@@ -565,19 +731,25 @@ export default {
 
       } catch (error) {
 
+        /* --- Si hay un error, se devuelve --- */
         console.error('Error fetching users:', error)
 
       }
 
     },
 
+    /* --- Obtener todas las reservas --- */
     async fetchBookings() {
 
       try {
 
+        /* --- Obtener el token llamando al service de autenticación --- */
         const token = authService.getToken()
+
+        /* --- Hacer la petición a la API --- */
         const response = await fetch('http://localhost:5000/api/bookings', {
 
+          /* --- Mandar el token en la petición --- */
           headers: {
 
             'Auth': `Bearer ${token}`
@@ -586,6 +758,7 @@ export default {
 
         })
         
+        /* --- Si la respuesta es correcta, guardar las reservas --- */
         if (response.ok) {
 
           this.bookings = await response.json()
@@ -594,12 +767,14 @@ export default {
 
       } catch (error) {
 
+        /* --- Si hay un error, se devuelve --- */
         console.error('Error fetching bookings:', error)
 
       }
       
     },
 
+    /* --- Formatear la fecha --- */
     formatDateShort(dateString) {
 
       if (!dateString) return 'N/A'
@@ -607,6 +782,7 @@ export default {
 
     },
 
+    /* --- Eliminar usuario --- */
     handleDeleteUser(user) {
 
       this.userToDelete = user;
@@ -614,18 +790,29 @@ export default {
 
     },
 
+    /* --- Confirmar eliminación de usuario --- */
     async confirmDeleteUser() {
 
+      /* --- Si no hay usuario seleccionado, no se hace nada --- */
       if (!this.userToDelete) return;
+
+      /* --- Guardar el usuario seleccionado --- */
       const user = this.userToDelete;
+
+      /* --- Cerrar el modal --- */
       this.showDeleteUserModal = false;
 
       try {
 
+        /* --- Obtener el token llamando al service de autenticación --- */
         const token = authService.getToken()
+
+        /* --- Hacer la petición a la API --- */
         const response = await fetch(`http://localhost:5000/api/users/${user.id}`, {
 
           method: 'DELETE',
+
+          /* --- Mandar el token en la petición --- */
           headers: {
 
             'Auth': `Bearer ${token}`
@@ -634,6 +821,7 @@ export default {
 
         })
         
+        /* --- Si la respuesta es correcta, mostrar un mensaje de éxito --- */
         if (response.ok) {
 
           this.showInfo('Success', `User @${user.username} deleted.`)
@@ -643,6 +831,7 @@ export default {
 
         } else {
 
+          /* --- Si la respuesta no es correcta, mostrar un mensaje de error --- */
           const error = await response.json()
           this.showInfo('Error', error.error || 'Failed to delete user', 'error')
 
@@ -650,16 +839,19 @@ export default {
 
       } catch (error) {
 
+        /* --- Si hay un error, mostrar un mensaje de error --- */
         this.showInfo('Error', 'Unexpected error deleting user', 'error')
 
       } finally {
 
+        /* --- Limpiar el usuario seleccionado --- */
         this.userToDelete = null;
 
       }
 
     },
 
+    /* --- Ver los asistentes de un concierto --- */
     handleViewAttendees(activity) {
 
       this.selectedActivityForAttendees = activity;
@@ -667,6 +859,7 @@ export default {
 
     },
 
+    /* --- Cancelar una reserva --- */
     handleCancelBooking(booking) {
 
       this.bookingToCancel = booking;
@@ -674,18 +867,29 @@ export default {
 
     },
 
+    /* --- Confirmar cancelación de reserva --- */
     async confirmCancelBooking() {
 
+      /* --- Si no hay reserva seleccionada, no se hace nada --- */
       if (!this.bookingToCancel) return;
+
+      /* --- Guardar la reserva seleccionada --- */
       const booking = this.bookingToCancel;
+
+      /* --- Cerrar el modal --- */
       this.showCancelBookingModal = false;
 
       try {
 
+        /* --- Obtener el token llamando al service de autenticación --- */
         const token = authService.getToken()
+
+        /* --- Hacer la petición a la API --- */
         const response = await fetch(`http://localhost:5000/api/users/${booking.user_id}/bookings/${booking.activity_id}`, {
 
           method: 'DELETE',
+
+          /* --- Mandar el token en la petición --- */
           headers: {
 
             'Auth': `Bearer ${token}`
@@ -694,6 +898,7 @@ export default {
 
         })
         
+        /* --- Si la respuesta es correcta, mostrar un mensaje de éxito --- */
         if (response.ok) {
 
           this.showInfo('Success', 'Booking cancelled.')
@@ -702,6 +907,7 @@ export default {
 
         } else {
 
+          /* --- Si la respuesta no es correcta, mostrar un mensaje de error --- */
           const error = await response.json()
           this.showInfo('Error', error.error || 'Failed to cancel booking', 'error')
 
@@ -719,15 +925,19 @@ export default {
 
     },
 
+    /* --- Obtener todos los conciertos --- */
     async fetchActivities() {
 
+      /* --- Se asume que aún no han cargado --- */
       this.loading = true
 
       try {
 
+        /* --- Obtener el token llamando al service de autenticación --- */
         const token = authService.getToken()
         const response = await fetch('http://localhost:5000/api/activities', {
 
+          /* --- Mandar el token en la petición --- */
           headers: {
             
             'Auth': `Bearer ${token}`
@@ -736,6 +946,7 @@ export default {
 
         })
         
+        /* --- Si la respuesta es correcta, guardar los conciertos --- */
         if (response.ok) {
 
           this.activities = await response.json()
@@ -744,16 +955,19 @@ export default {
 
       } catch (error) {
 
+        /* --- Si hay un error, mostrar un mensaje de error --- */
         console.error('Error fetching activities:', error)
 
       } finally {
 
+        /* --- Ya están los conciertos cargados --- */
         this.loading = false
 
       }
 
     },
 
+    /* --- Abrir el modal de creación de conciertos --- */
     openCreateModal() {
 
       this.activeTab = 'activities'
@@ -762,6 +976,7 @@ export default {
 
     },
 
+    /* --- Abrir el modal de edición de conciertos --- */
     handleEditActivity(activity) {
 
       this.selectedActivity = activity
@@ -769,6 +984,7 @@ export default {
 
     },
 
+    /* --- Abrir el modal de eliminación de conciertos --- */
     handleDeleteActivity(activityId) {
 
       this.activityToDelete = activityId;
@@ -776,16 +992,21 @@ export default {
 
     },
 
+    /* --- Confirmar la eliminación de un concierto --- */
     async confirmDeleteActivity() {
 
+      /* --- Si no hay concierto seleccionado, no se hace nada --- */
       if (!this.activityToDelete) return
       
       try {
 
+        /* --- Obtener el token llamando al service de autenticación --- */
         const token = authService.getToken()
         const response = await fetch(`http://localhost:5000/api/activities/${this.activityToDelete}`, {
 
           method: 'DELETE',
+          
+          /* --- Mandar el token en la petición --- */
           headers: {
 
             'Auth': `Bearer ${token}`
@@ -794,36 +1015,50 @@ export default {
 
         })
 
+        /* --- Si la respuesta es correcta, eliminar el concierto --- */
         if (response.ok) {
 
+          /* --- Eliminar el concierto de la lista --- */
           this.activities = this.activities.filter(a => a.id !== this.activityToDelete)
+
+          /* --- Cerrar el modal de eliminación --- */
           this.showDeleteModal = false
+
+          /* --- Limpiar el concierto seleccionado --- */
           this.activityToDelete = null
+
+          /* --- Mostrar un mensaje de éxito --- */
           this.showInfo('Deleted', 'The concert has been removed successfully.')
 
         } else {
 
+          /* --- Si la respuesta no es correcta, mostrar un mensaje de error --- */
           this.showInfo('Error', 'Failed to delete concert', 'error')
 
         }
 
       } catch (error) {
 
+        /* --- Si hay un error, mostrar un mensaje de error --- */
         console.error('Error deleting activity:', error)
 
       }
 
     },
 
+    /* --- Guardar un concierto --- */
     async handleSaveActivity(activityData) {
 
+      /* --- Se asume que se está creando un concierto --- */
       this.createLoading = true
 
       try {
 
+        /* --- Obtener el token llamando al service de autenticación --- */
         const token = authService.getToken()
         const formData = new FormData()
         
+        /* --- Añadir los datos del concierto al formulario --- */
         formData.append('name', activityData.name)
         formData.append('description', activityData.description)
         formData.append('start', new Date(activityData.start).toISOString())
@@ -831,17 +1066,20 @@ export default {
         formData.append('capacity', activityData.capacity)
         formData.append('state', activityData.state || 'active')
         
+        /* --- Si hay una imagen, añadirla al formulario --- */
         if (activityData.image) {
 
           formData.append('image', activityData.image)
 
         }
 
+        /* --- Si se está editando un concierto, usar PUT, si no, usar POST --- */
         const isEdit = !!this.selectedActivity
         const url = isEdit ? `http://localhost:5000/api/activities/${this.selectedActivity.id}` : 'http://localhost:5000/api/activities'
         
         const method = isEdit ? 'PUT' : 'POST'
         
+        /* --- Hacer la petición a la API --- */
         const response = await fetch(url, {
           method: method,
           headers: {
@@ -852,14 +1090,20 @@ export default {
           body: formData
         })
         
+        /* --- Si la respuesta es correcta, actualizar los conciertos --- */
         if (response.ok) {
 
           await this.fetchActivities()
+
+          /* --- Cerrar el modal de edición --- */
           this.showActivityModal = false
+
+          /* --- Mostrar un mensaje de éxito --- */
           this.showInfo('Success', `Concert ${isEdit ? 'updated' : 'created'} successfully!`)
 
         } else {
 
+          /* --- Si la respuesta no es correcta, mostrar un mensaje de error --- */
           const error = await response.json()
           this.showInfo('Error', error.error || 'Failed to save concert', 'error')
 
@@ -867,17 +1111,20 @@ export default {
 
       } catch (error) {
 
+        /* --- Si hay un error, mostrar un mensaje de error --- */
         console.error('Error saving activity:', error)
         this.showInfo('Error', 'An unexpected error occurred. Check console for details.', 'error')
 
       } finally {
 
+        /* --- Ya se ha creado, ya no está cargando --- */
         this.createLoading = false
 
       }
 
     },
 
+    /* --- Mostrar un mensaje de información en el modal de mensajes informativos --- */
     showInfo(title, message, type = 'info') {
 
       this.infoModal = {
@@ -891,6 +1138,7 @@ export default {
 
     },
 
+    /* --- Editar un usuario --- */
     handleEditUser(user) {
 
       this.selectedUser = user
@@ -898,33 +1146,50 @@ export default {
 
     },
 
+    /* --- Guardar un usuario --- */
     async handleSaveUser(userData) {
 
+      /* --- Se asume que se está editando un usuario --- */
       this.editUserLoading = true
 
       try {
 
+        /* --- Obtener el token llamando al service de autenticación --- */
         const token = authService.getToken()
+        
+        /* --- Hacer la petición a la API --- */
         const response = await fetch(`http://localhost:5000/api/users/${userData.id}`, {
 
           method: 'PUT',
+
+          /* --- Mandar el token en la petición --- */
           headers: {
 
             'Auth': `Bearer ${token}`,
             'Content-Type': 'application/json'
 
           },
+
+          /* --- Mandar los datos del usuario en la petición --- */
           body: JSON.stringify(userData)
+
         })
         
+        /* --- Si la respuesta es correcta, actualizar los usuarios --- */
         if (response.ok) {
 
+          /* --- Cerrar el modal de edición --- */
           this.showUserEditModal = false
+
+          /* --- Mostrar un mensaje de éxito --- */
           this.showInfo('Success', `User information updated successfully.`)
+
+          /* --- Actualizar los usuarios --- */
           this.fetchAllUsers()
 
         } else {
 
+          /* --- Si la respuesta no es correcta, mostrar un mensaje de error --- */
           const error = await response.json()
           this.showInfo('Error', error.error || 'Failed to update user', 'error')
 
@@ -932,11 +1197,13 @@ export default {
 
       } catch (error) {
 
+        /* --- Si hay un error, mostrar un mensaje de error --- */
         console.error('Error updating user:', error)
         this.showInfo('Error', 'An unexpected error occurred.', 'error')
 
       } finally {
 
+        /* --- Ya no está cargando, el usuario ya ha sido creado --- */
         this.editUserLoading = false
 
       }
@@ -946,10 +1213,13 @@ export default {
   }
 
 }
+
 </script>
 
+<!-- --- Estilos de la vista --- -->
 <style scoped>
 
+/* --- Contenedor principal --- */
 .admin-container {
 
   width: 100vw;
@@ -963,7 +1233,7 @@ export default {
 
 }
 
-/* Sidebar */
+/* --- Barra de navegación --- */
 .admin-sidebar {
 
   width: 100px;
@@ -1072,7 +1342,7 @@ export default {
 
 }
 
-/* Main Content */
+/* --- Estilos generales del contenido de la vista --- */
 .admin-main {
 
   flex: 1;
@@ -1110,24 +1380,6 @@ export default {
 
 }
 
-@keyframes fadeIn {
-
-  from {
-
-    opacity: 0;
-    transform: translateY(10px);
-
-  }
-
-  to {
-
-    opacity: 1;
-    transform: translateY(0);
-
-  }
-
-}
-
 /* Tab Header & Action Button */
 .tab-header {
 
@@ -1144,15 +1396,6 @@ export default {
   align-items: flex-start;
   gap: 0.5rem;
   margin-bottom: 3rem;
-
-}
-
-.tab-subtitle {
-
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 400;
-  margin-left: 1%;
 
 }
 
@@ -1187,7 +1430,7 @@ export default {
 
 }
 
-/* Activities Grid */
+/* --- Grid de conciertos --- */
 .activities-grid {
 
   display: grid;
@@ -1224,7 +1467,7 @@ export default {
 
 }
 
-/* Stats Cards */
+/* --- Tarjetas de estadísticas --- */
 .stats-grid {
 
   display: grid;
@@ -1325,7 +1568,7 @@ export default {
 
 }
 
-/* Quick Actions Cards */
+/* --- Grid de acciones de acceso rápido --- */
 .actions-grid {
 
   display: grid;
@@ -1401,7 +1644,7 @@ export default {
 
 }
 
-/* Search Input */
+/* --- Buscador --- */
 .search-input {
 
   background: rgba(255, 255, 255, 0.05);
@@ -1424,7 +1667,7 @@ export default {
 
 }
 
-/* Data Table */
+/* --- Tablas --- */
 .data-table-container {
 
   background: rgba(20, 15, 35, 0.4);
@@ -1475,20 +1718,6 @@ export default {
   display: flex;
   align-items: center;
   gap: 1rem;
-
-}
-
-.user-avatar {
-
-  width: 35px;
-  height: 35px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 0.9rem;
 
 }
 
@@ -1752,6 +1981,25 @@ export default {
 
   opacity: 0.3;
   cursor: not-allowed;
+
+}
+
+/* --- Animación de Fade para las tablas --- */
+@keyframes fadeIn {
+
+  from {
+
+    opacity: 0;
+    transform: translateY(10px);
+
+  }
+
+  to {
+
+    opacity: 1;
+    transform: translateY(0);
+
+  }
 
 }
 

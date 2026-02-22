@@ -1,39 +1,56 @@
+<!-- --- Estructura del modal para ver los asistentes a un concierto --- -->
 <template>
 
+  <!-- --- Si el modal está visible, se muestra su contenido --- -->
   <div v-if = "visible" class = "modal-overlay" @click.self = "$emit('close')">
 
+    <!-- --- Contenedor principal del modal --- -->
     <div class = "modal-container">
 
+      <!-- --- Header --- -->
       <div class = "modal-header">
 
+        <!-- --- Título del modal --- -->
         <h2 class = "modal-title">Attendees: {{ activity?.name }}</h2>
+
+        <!-- --- Botón de cerrar --- -->
         <button class = "close-btn" @click = "$emit('close')">×</button>
 
       </div>
       
+      <!-- --- Cuerpo del modal --- -->
       <div class = "modal-body">
 
+        <!-- --- Si está cargando, muestra un mensaje de carga --- -->
         <div v-if = "loading" class = "loading-state">Loading attendees...</div>
 
+        <!-- --- Si no hay asistentes, muestra un mensaje de que no hay asistentes --- -->
         <div v-else-if = "attendeeDetails.length === 0" class = "empty-state">
 
           <p>No attendees yet for this concert.</p>
 
         </div>
         
+        <!-- --- Si hay asistentes, se muestra la lista --- -->
         <div v-else class = "attendees-list">
 
+          <!-- --- Se recorre la lista de asistentes y se crea un contenedor para cada uno --- -->
           <div v-for = "attendee in attendeeDetails" :key = "attendee.username" class = "attendee-item">
 
+            <!-- --- Icono del asistente --- -->
             <div class = "attendee-icon">
 
               <img src = "@/assets/icons/users.svg" alt = "User"/>
 
             </div>
 
+            <!-- --- Información del asistente --- -->
             <div class = "attendee-info">
 
+              <!-- --- Nombre del asistente --- -->
               <span class = "attendee-name">{{ attendee.name }}</span>
+
+              <!-- --- Nombre de usuario del asistente --- -->
               <span class = "attendee-username">@{{ attendee.username }}</span>
 
             </div>
@@ -44,8 +61,10 @@
 
       </div>
       
+      <!-- --- Footer --- -->
       <div class = "modal-footer">
 
+        <!-- --- Botón de cerrar --- -->
         <button class = "btn btn-secondary" @click = "$emit('close')">Close</button>
 
       </div>
@@ -56,14 +75,19 @@
 
 </template>
 
+<!-- --- Lógica del componente --- -->
 <script>
 
+/* --- Exportación del componente --- */
 export default {
 
+  /* --- Nombre del componente --- */
   name: 'AttendeesModal',
 
+  /* --- Atributos que se le pasan al componente --- */
   props: {
 
+    /* --- Si es visible o no --- */
     visible: {
 
       type: Boolean,
@@ -71,6 +95,7 @@ export default {
 
     },
 
+    /* --- Concierto del que se recuperan los asistentes --- */
     activity: {
 
       type: Object,
@@ -78,6 +103,7 @@ export default {
 
     },
 
+    /* --- Lista de todos los usuarios --- */
     allUsers: {
 
       type: Array,
@@ -85,6 +111,7 @@ export default {
 
     },
 
+    /* --- Si está cargando o no --- */
     loading: {
 
       type: Boolean,
@@ -94,14 +121,19 @@ export default {
 
   },
 
+  /* --- Valores computados --- */
   computed: {
 
+    /* --- Detalles de los asistentes --- */
     attendeeDetails() {
 
+      /* --- Si no hay actividad o no hay usuarios, devuelve un array vacío --- */
       if (!this.activity || !this.activity.users) return [];
       
+      /* --- Recorrer la lista de usuarios y crear un array con los detalles de cada uno --- */
       return this.activity.users.map(username => {
 
+        /* --- Buscar el usuario en la lista de todos los usuarios --- */
         const user = this.allUsers.find(u => u.username === username);
 
         return {
@@ -121,8 +153,10 @@ export default {
 
 </script>
 
+<!-- --- Estilos del componente --- -->
 <style scoped>
 
+/* --- Estilos para el difuminar el fondo y que el modal quede por encima y centrado --- */
 .modal-overlay {
 
   position: fixed;
@@ -141,6 +175,7 @@ export default {
 
 }
 
+/* --- Contenedor principal --- */
 .modal-container {
 
   background: rgba(20, 15, 35, 0.8);
@@ -158,6 +193,7 @@ export default {
 
 }
 
+/* --- Header --- */
 .modal-header {
 
   padding: 1.5rem 2rem;
@@ -168,6 +204,7 @@ export default {
 
 }
 
+/* --- Título --- */
 .modal-title {
 
   font-size: 1.25rem;
@@ -181,6 +218,7 @@ export default {
 
 }
 
+/* --- Botón de cerrar --- */
 .close-btn {
 
   background: transparent;
@@ -200,6 +238,7 @@ export default {
 
 }
 
+/* --- Contenido --- */
 .modal-body {
 
   padding: 1.5rem 2rem;
@@ -208,6 +247,7 @@ export default {
 
 }
 
+/* --- Lista de asistentes --- */
 .attendees-list {
 
   display: flex;
@@ -216,6 +256,7 @@ export default {
 
 }
 
+/* --- Carta de un asistente --- */
 .attendee-item {
 
   display: flex;
@@ -287,6 +328,7 @@ export default {
 
 }
 
+/* --- Footer --- */
 .modal-footer {
 
   padding: 1rem 2rem 1.5rem;
@@ -295,6 +337,7 @@ export default {
 
 }
 
+/* --- Botón --- */
 .btn {
 
   padding: 0.7rem 1.5rem;
@@ -322,6 +365,7 @@ export default {
 
 }
 
+/* --- Animación para el difuminado del fondo --- */
 @keyframes fadeIn {
 
   from { opacity: 0; }
@@ -330,6 +374,7 @@ export default {
 
 }
 
+/* --- Animación para el movimiento del modal --- */
 @keyframes slideUp {
 
   from { 

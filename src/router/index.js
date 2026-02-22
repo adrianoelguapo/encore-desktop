@@ -6,6 +6,7 @@ import Dashboard from '../views/Dashboard.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import authService from '../services/authService'
 
+/* --- Rutas de la aplicación --- */
 const routes = [
 
   {
@@ -52,6 +53,7 @@ const routes = [
 
 ]
 
+/* --- Router --- */
 const router = createRouter({
 
   history: createWebHashHistory(),
@@ -59,13 +61,16 @@ const router = createRouter({
 
 })
 
+/* --- Verificar que el usuario esté autenticado y tenga permisos cada vez que se mueva de una vista a otra --- */
 router.beforeEach((to, from, next) => {
 
+  /* --- Verificar si la ruta requiere autenticación o permisos de admin --- */
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
   const isAuthenticated = authService.isAuthenticated()
   const user = authService.getCurrentUser()
 
+  /* --- A la hora de navegar a la página de inicio, se le lleva a un panel dependiendo de su rol --- */
   if (to.name === 'Home' && isAuthenticated) {
 
 
@@ -83,6 +88,7 @@ router.beforeEach((to, from, next) => {
 
   }
 
+  /* --- Si la ruta requiere autenticación y el usuario no está logeado, se le lleva a la página de login, si no se le lleva al panel correspondiente --- */
   if (requiresAuth && !isAuthenticated) {
 
     next('/login')

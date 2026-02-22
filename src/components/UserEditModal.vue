@@ -1,20 +1,30 @@
+<!-- --- Estructura del modal para editar un usuario --- -->
 <template>
 
+  <!-- --- Transición para que el modal aparezca y desaparezca de forma suave --- -->
   <transition name = "modal-fade">
 
+    <!-- --- Si el modal está visible, se muestra su contenido --- -->
     <div v-if = "visible" class = "modal-overlay" @click.self = "$emit('close')">
 
+      <!-- --- Contenedor principal del modal --- -->
       <div class = "modal-content">
 
+        <!-- --- Header --- -->
         <div class = "modal-header">
 
+          <!-- --- Título --- -->
           <h2 class = "modal-title">Edit User Info</h2>
+
+          <!-- --- Botón de cerrar --- -->
           <button class = "close-btn" @click = "$emit('close')">&times;</button>
 
         </div>
 
+        <!-- --- Formulario para editar el usuario --- -->
         <form @submit.prevent = "handleSubmit" class = "modal-form">
 
+          <!-- --- Input para el nombre completo --- -->
           <div class = "form-group">
 
             <label>Full Name</label>
@@ -22,6 +32,7 @@
 
           </div>
 
+          <!-- --- Input para el nombre de usuario --- -->
           <div class = "form-group">
 
             <label>Username</label>
@@ -29,6 +40,7 @@
 
           </div>
 
+          <!-- --- Footer del modal --- -->
           <div class = "modal-footer">
 
             <button type = "button" class = "btn-secondary" @click = "$emit('close')">Cancel</button>
@@ -50,12 +62,16 @@
 
 </template>
 
+<!-- --- Lógica del componente --- -->
 <script>
 
+/* --- Exportación del componente --- */
 export default {
 
+/* --- Nombre del componente --- */
   name: 'UserEditModal',
 
+  /* --- Atributos que se le pasan al componente --- */
   props: {
 
     visible: Boolean,
@@ -64,6 +80,7 @@ export default {
 
   },
 
+  /* --- Estructura de datos del componente --- */
   data() {
 
     return {
@@ -79,10 +96,12 @@ export default {
 
   },
 
+  /* --- Observador de cambios en los atributos --- */
   watch: {
 
     visible(val) {
 
+      /* --- Si el modal es visible y hay datos del usuario, se actualiza el formulario --- */
       if (val && this.userData) {
 
         this.form = {
@@ -98,8 +117,10 @@ export default {
 
   },
 
+  /* --- Métodos --- */
   methods: {
 
+    /* --- Envío del formulario --- */
     handleSubmit() {
 
       this.$emit('save', { ...this.form, id: this.userData.id })
@@ -112,8 +133,10 @@ export default {
 
 </script>
 
+<!-- --- Estilos del componente --- -->
 <style scoped>
 
+/* --- Estilos para el difuminar el fondo y que el modal quede por encima y centrado --- */
 .modal-overlay {
 
   position: fixed;
@@ -131,6 +154,7 @@ export default {
 
 }
 
+/* --- Contenedor principal --- */
 .modal-content {
 
   background: rgba(20, 15, 35, 0.8);
@@ -145,6 +169,7 @@ export default {
 
 }
 
+/* --- Header --- */
 .modal-header {
 
   padding: 2rem 2rem 1.5rem;
@@ -155,6 +180,7 @@ export default {
 
 }
 
+/* --- Título --- */
 .modal-title {
 
   font-size: 1.5rem;
@@ -168,6 +194,7 @@ export default {
 
 }
 
+/* --- Botón de cerrar --- */
 .close-btn {
 
   background: transparent;
@@ -187,6 +214,7 @@ export default {
 
 }
 
+/* --- Formulario --- */
 .modal-form {
 
   padding: 2rem;
@@ -236,6 +264,7 @@ export default {
 
 }
 
+/* --- Footer --- */
 .modal-footer {
 
   display: flex;
@@ -245,6 +274,7 @@ export default {
 
 }
 
+/* --- Botones --- */
 .btn-secondary {
 
   background: rgba(255, 255, 255, 0.05);
@@ -295,6 +325,7 @@ export default {
 
 }
 
+/* --- Animación para el difuminado del fondo --- */
 @keyframes fadeIn {
 
   from { opacity: 0; }
@@ -303,6 +334,7 @@ export default {
 
 }
 
+/* --- Animación para el movimiento del modal --- */
 @keyframes slideUp {
 
   from { 
@@ -321,7 +353,7 @@ export default {
 
 }
 
-/* Transitions */
+/* --- Transiciones --- */
 .modal-fade-enter-active, .modal-fade-leave-active {
 
   transition: all 0.3s ease;

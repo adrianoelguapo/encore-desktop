@@ -10,7 +10,7 @@
       <!-- --- Barra de navegación --- -->
       <nav class = "sidebar-nav">
 
-        <!-- --- Botones de navegación (se recorre el array de tabs definido en el atributo data del export y se crea un botón para cada tab) --- -->
+        <!-- --- Botones de navegación (se recorre el array de tabs definido en el atributo data y se crea un botón para cada tab) --- -->
         <button v-for = "tab in tabs" :key = "tab.id" @click = "activeTab = tab.id" :class = "['nav-icon-btn', { active: activeTab === tab.id }]" :title = "tab.label">
 
           <!-- --- Icono del botón --- -->
@@ -88,7 +88,7 @@
 
                 </div>
 
-                <!-- --- Información de la carta --- -->
+                <!-- --- Contenido de la carta --- -->
                 <div class = "stat-info">
 
                   <!-- --- Título --- -->
@@ -394,7 +394,7 @@ export default {
   /* --- Cuando la vista se carga --- */
   mounted() {
 
-    /* --- Pillar el nombre de usuario del LocalStorage llamando al service de autenticación --- */
+    /* --- Pillar el nombre de usuario llamando al service de autenticación --- */
     this.user = authService.getCurrentUser()
 
     /* --- Si se encentra el usuario --- */
@@ -1209,6 +1209,7 @@ export default {
 }
 
 .floating-input {
+
   width: 100%;
   padding: 1.25rem 0;
   background: transparent;
@@ -1219,9 +1220,11 @@ export default {
   outline: none;
   transition: all 0.3s ease;
   font-family: inherit;
+
 }
 
 .floating-label {
+
   position: absolute;
   left: 0;
   top: 1.25rem;
@@ -1230,21 +1233,27 @@ export default {
   font-weight: 500;
   pointer-events: none;
   transition: all 0.3s ease;
+
 }
 
 .floating-input:focus {
+
   border-bottom-color: #8b5cf6;
+
 }
 
 .floating-input:focus ~ .floating-label,
 .floating-input:not(:placeholder-shown) ~ .floating-label {
+
   top: -1.5rem;
   font-size: 0.875rem;
   color: #c4b5fd;
   font-weight: 600;
+
 }
 
 .save-profile-btn {
+
   background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
   color: white;
   border: none;
@@ -1257,36 +1266,49 @@ export default {
   width: 100%;
   margin-top: 1rem;
   box-shadow: 0 12px 40px rgba(139, 92, 246, 0.35);
+
 }
 
 .save-profile-btn:hover:not(:disabled) {
+
   background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
   box-shadow: 0 16px 50px rgba(139, 92, 246, 0.45);
   transform: translateY(-3px);
+
 }
 
 .save-profile-btn:disabled {
+
   opacity: 0.5;
   cursor: not-allowed;
+
 }
 
 /* --- Barra de scroll --- */
 .activities-grid::-webkit-scrollbar {
+
   width: 8px;
+
 }
 
 .activities-grid::-webkit-scrollbar-track {
+
   background: rgba(255, 255, 255, 0.02);
   border-radius: 10px;
+
 }
 
 .activities-grid::-webkit-scrollbar-thumb {
+
   background: rgba(139, 92, 246, 0.2);
   border-radius: 10px;
+
 }
 
 .activities-grid::-webkit-scrollbar-thumb:hover {
+
   background: rgba(139, 92, 246, 0.4);
+
 }
 
 /* --- Animación de Fade --- */

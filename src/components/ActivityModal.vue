@@ -1,20 +1,30 @@
+<!-- --- Estructura del modal para editar un concierto --- -->
 <template>
 
+  <!-- --- Si el modal está visible, se muestra su contenido --- -->
   <div v-if = "visible" class = "modal-overlay" @click.self = "$emit('close')">
 
+    <!-- --- Contenedor principal del modal --- -->
     <div class = "modal-container">
 
+      <!-- --- Header --- -->
       <div class = "modal-header">
 
+        <!-- --- Título --- -->
         <h2 class = "modal-title">{{ isEditing ? 'Edit Concert' : 'Create New Concert' }}</h2>
+        
+        <!-- --- Botón de cerrar --- -->
         <button class = "close-btn" @click = "$emit('close')">×</button>
         
       </div>
       
+      <!-- --- Contenido del modal --- -->
       <div class = "modal-body">
 
+        <!-- --- Formulario para editar el concierto --- -->
         <form @submit.prevent = "handleSubmit" class = "activity-form">
 
+          <!-- --- Input para el nombre del concierto --- -->
           <div class = "form-group">
 
             <label for = "name">Name</label>
@@ -22,6 +32,7 @@
 
           </div>
           
+          <!-- --- Input para la descripción del concierto --- -->
           <div class = "form-group">
 
             <label for = "description">Description</label>
@@ -29,8 +40,10 @@
 
           </div>
           
+          <!-- --- Fila para la fecha y hora de inicio y fin --- -->
           <div class = "form-row">
 
+            <!-- --- Input para la fecha y hora de inicio --- -->
             <div class = "form-group">
 
               <label for = "start">Start Date & Time</label>
@@ -38,6 +51,7 @@
 
             </div>
             
+            <!-- --- Input para la fecha y hora de fin --- -->
             <div class = "form-group">
 
               <label for = "finish">End Date & Time</label>
@@ -47,8 +61,10 @@
 
           </div>
           
+          <!-- --- Fila para la capacidad y la imagen --- -->
           <div class = "form-row">
 
+            <!-- --- Input para la capacidad --- -->
             <div class = "form-group">
 
               <label for = "capacity">Capacity</label>
@@ -56,6 +72,7 @@
 
             </div>
             
+            <!-- --- Input para la imagen del concierto --- -->
             <div class = "form-group">
 
               <label for = "image">Event Image</label>
@@ -63,6 +80,7 @@
 
                 <input type = "file" id = "image" @change = "handleFileUpload" accept = "image/*" class = "file-input"/>
 
+                <!-- --- Nombre de la imagen --- -->
                 <div class = "file-label">
 
                   <span v-if = "imageFile">{{ imageFile.name }}</span>
@@ -77,11 +95,16 @@
 
           </div>
           
+          <!-- --- Footer del modal --- -->
           <div class = "modal-footer">
 
+            <!-- --- Botón de cancelar --- -->
             <button type = "button" class = "btn btn-secondary" @click = "$emit('close')">Cancel</button>
+            
+            <!-- --- Botón de guardar --- -->
             <button type = "submit" class = "btn btn-primary" :disabled = "loading">
 
+              <!-- --- Texto del botón de guardar --- -->
               {{ loading ? 'Saving...' : (isEditing ? 'Save Changes' : 'Create Concert') }}
 
             </button>
@@ -98,20 +121,26 @@
 
 </template>
 
+<!-- --- Lógica del componente --- -->
 <script>
 
+/* --- Exportación del componente --- */
 export default {
 
+  /* --- Nombre del componente --- */
   name: 'ActivityModal',
 
+  /* --- Atributos que se le pasan al componente --- */
   props: {
 
+    /* --- Si es visible o no --- */
     visible: {
 
       type: Boolean,
       default: false
 
     },
+
 
     loading: {
 
@@ -120,6 +149,7 @@ export default {
 
     },
 
+    /* --- Datos del concierto --- */
     activityData: {
 
       type: Object,
@@ -128,10 +158,12 @@ export default {
 
   },
 
+  /* --- Estructura de datos del componente --- */
   data() {
 
     return {
 
+      /* --- Formulario --- */
       form: {
 
         name: '',
@@ -143,15 +175,20 @@ export default {
 
       },
 
+      /* --- Archivo de imagen --- */
       imageFile: null,
+      
+      /* --- Nombre de la imagen actual --- */
       currentImageName: null
 
     }
 
   },
 
+  /* --- Valores computados --- */
   computed: {
 
+    /* --- Comprobar si se está editando el concierto --- */
     isEditing() {
 
       return !!this.activityData;
@@ -160,20 +197,24 @@ export default {
 
   },
 
+  /* --- Métodos del componente --- */
   methods: {
 
+    /* --- Maneja la carga de la imagen --- */
     handleFileUpload(event) {
 
       this.imageFile = event.target.files[0];
 
     },
 
+    /* --- Formatea la fecha para el input --- */
     formatDateForInput(isoString) {
 
       if (!isoString) return '';
 
       /* --- Si la fecha no tiene zona horaria ni desfase, le añadimos 'Z' para que se trate como UTC --- */
       let dateValue = isoString;
+
       if (typeof isoString === 'string' && !isoString.includes('Z') && !isoString.includes('+') && !isoString.match(/-\d{2}:\d{2}$/)) {
 
         dateValue += 'Z';
@@ -183,8 +224,7 @@ export default {
       const date = new Date(dateValue);
       if (isNaN(date.getTime())) return '';
       
-      /* --- Ajustamos la fecha restando el desfase local para obtener la cadena ISO local --- */
-      /* --- datetime-local espera YYYY-MM-DDTHH:MM en hora local --- */
+      /* --- Ajustamos la fecha restando el desfase local para obtener la fecha ISO local --- */
       const offset = date.getTimezoneOffset() * 60000;
       const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 16);
       
@@ -192,8 +232,10 @@ export default {
 
     },
 
+    /* --- Maneja el envío del formulario --- */
     handleSubmit() {
 
+      /* --- Comprueba que la fecha de fin sea mayor a la de inicio --- */
       if (new Date(this.form.finish) <= new Date(this.form.start)) {
 
         this.$emit('error', 'End date must be after start date');
@@ -201,6 +243,7 @@ export default {
 
       }
       
+      /* --- Activa el evento para guardar los datos del concierto --- */
       this.$emit('save', {
 
         ...this.form,
@@ -210,6 +253,7 @@ export default {
       
     },
 
+    /* --- Resetea el formulario --- */
     resetForm() {
 
       this.form = {
@@ -226,14 +270,19 @@ export default {
       this.imageFile = null;
       this.currentImageName = null;
     }
+
   },
 
+  /* --- Observa los cambios en las propiedades --- */
   watch: {
 
+    /* --- Observa los cambios en la propiedad visible --- */
     visible(newVal) {
 
+      /* --- Si el modal es visible, se resetea el formulario --- */
       if (newVal) {
 
+        /* --- Si se está editando el concierto, se carga su información --- */
         if (this.activityData) {
 
           this.form = {
@@ -247,14 +296,19 @@ export default {
 
           };
 
+          /* --- Nombre de la imagen actual --- */
           this.currentImageName = this.activityData.image;
 
         } else {
 
+          /* --- Resetea el formulario --- */
           this.resetForm();
+
         }
+
       } else {
 
+        /* --- Resetea el formulario --- */
         this.resetForm();
 
       }
@@ -267,8 +321,10 @@ export default {
 
 </script>
 
+<!-- --- Estilos del componente --- -->
 <style scoped>
 
+/* --- Estilos para el difuminar el fondo y que el modal quede por encima y centrado --- */
 .modal-overlay {
 
   position: fixed;
@@ -286,6 +342,7 @@ export default {
 
 }
 
+/* --- Contenedor principal --- */
 .modal-container {
 
   background: rgba(20, 15, 35, 0.8);
@@ -303,6 +360,7 @@ export default {
 
 }
 
+/* --- Header --- */
 .modal-header {
 
   padding: 2rem 2rem 1.5rem;
@@ -313,6 +371,7 @@ export default {
 
 }
 
+/* --- Título --- */
 .modal-title {
 
   font-size: 1.5rem;
@@ -326,6 +385,7 @@ export default {
 
 }
 
+/* --- Botón de cerrar --- */
 .close-btn {
 
   background: transparent;
@@ -345,6 +405,7 @@ export default {
 
 }
 
+/* --- Contenido --- */
 .modal-body {
 
   padding: 2rem;
@@ -352,6 +413,7 @@ export default {
 
 }
 
+/* --- Formulario --- */
 .form-group {
 
   margin-bottom: 1.5rem;
@@ -466,6 +528,7 @@ label {
 
 }
 
+/* --- Footer --- */
 .modal-footer {
 
   display: flex;
@@ -475,6 +538,7 @@ label {
 
 }
 
+/* --- Botones --- */
 .btn {
 
   padding: 0.8rem 1.8rem;
@@ -526,6 +590,7 @@ label {
 
 }
 
+/* --- Animación para el difuminado del fondo --- */
 @keyframes fadeIn {
 
   from { opacity: 0; }
@@ -534,6 +599,7 @@ label {
 
 }
 
+/* --- Animación para el movimiento del modal --- */
 @keyframes slideUp {
 
   from { 

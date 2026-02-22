@@ -1,26 +1,38 @@
+<!-- --- Estructura de cada carta de cada concierto --- -->
 <template>
 
+  <!-- --- Contenedor principal --- -->
   <div class = "activity-card">
 
+    <!-- --- Header --- -->
     <div class = "card-header">
 
+      <!-- --- Imagen del concierto --- -->
       <img :src = "imageUrl" :alt = "activity.name" class = "card-image" @error = "handleImageError"/>
 
+      <!-- --- Elemento para hacer la imagen un poco más oscura --- -->
       <div class = "image-overlay"></div>
 
     </div>
     
+    <!-- --- Cuerpo de la tarjeta --- -->
     <div class = "card-body">
 
+      <!-- --- Detalles del concierto --- -->
       <div class = "card-info">
 
+        <!-- --- Título --- -->
         <h3 class = "card-title">{{ activity.name }}</h3>
+
+        <!-- --- Descripción --- -->
         <p class = "card-description" v-if = "activity.description">{{ truncateText(activity.description, 60) }}</p>
 
       </div>
       
+      <!-- --- Datos --- -->
       <div class = "card-metrics">
 
+        <!-- --- Fecha y hora --- -->
         <div class = "metric">
 
           <span class = "metric-label">Date & Time</span>
@@ -32,6 +44,7 @@
 
         </div>
 
+        <!-- --- Plazas disponibles --- -->
         <div class = "metric">
 
           <div class = "metric-label">Occupancy</div>
@@ -47,22 +60,27 @@
 
       </div>
 
+      <!-- --- Footer --- -->
       <div class = "card-footer" :class = "{ 'user-footer': !isAdmin }">
 
+        <!-- --- Si es admin muestra los botones de editar, ver asistentes y eliminar --- -->
         <template v-if = "isAdmin">
 
+          <!-- --- Botón de editar --- -->
           <button class = "action-btn edit" @click = "$emit('edit', activity)">
 
             <span>Modify</span>
 
           </button>
           
+          <!-- --- Botón de ver asistentes --- -->
           <button class = "action-btn attendees" @click = "$emit('view-attendees', activity)">
 
             <span>Attendees</span>
 
           </button>
 
+          <!-- --- Botón de eliminar --- -->
           <button class = "action-btn delete" @click = "$emit('delete', activity.id)">
 
             <img src = "@/assets/icons/trash.svg" class = "btn-icon" alt = "Delete" />
@@ -71,8 +89,10 @@
 
         </template>
         
+        <!-- --- Si no es admin muestra los botones de reservar, cancelar reserva y si está finalizado --- -->
         <template v-else>
 
+          <!-- --- Botón de finalizado --- -->
           <button v-if = "isFinished" class = "action-btn finished" disabled>
 
             <span>Finished</span>
@@ -81,12 +101,15 @@
 
           <template v-else>
 
+            <!-- --- Botón de reservar --- -->
             <button v-if = "!isBooked" class = "action-btn book" @click = "$emit('book', activity)" :disabled = "isFull">
 
+              <!-- --- Comprueba si hay plazas disponibles y muestra texto n consecuencia --- -->
               <span>{{ isFull ? 'Activity Full' : 'Book Now' }}</span>
 
             </button>
 
+            <!-- --- Botón de cancelar reserva --- -->
             <button v-else class = "action-btn cancel-booking" @click = "$emit('cancel', activity)">
 
               <span>Cancel Reservation</span>
@@ -105,14 +128,19 @@
 
 </template>
 
+<!-- --- Lógica del componente --- -->
 <script>
 
+/* --- Exportación del componente --- */
 export default {
 
+  /* --- Nombre del componente --- */
   name: 'ActivityCard',
 
+  /* --- Atributos que se le pasan al componente --- */
   props: {
 
+    /* --- Concierto a mostrar --- */
     activity: {
 
       type: Object,
@@ -120,6 +148,7 @@ export default {
 
     },
 
+    /* --- Si el usuario es admin --- */
     isAdmin: {
 
       type: Boolean,
@@ -127,6 +156,7 @@ export default {
 
     },
 
+    /* --- Si el usuario ha reservado ya para ese concierto --- */
     isBooked: {
 
       type: Boolean,
@@ -136,10 +166,13 @@ export default {
 
   },
 
+  /* --- Valores computados --- */
   computed: {
 
+    /* --- URL de la imagen --- */
     imageUrl() {
 
+      /* --- Si tiene imagen, se muestra, si no, se muestra una por defecto --- */
       if (this.activity.image) {
 
         return `http://localhost:5000/static/images/${this.activity.image}`;
@@ -150,14 +183,21 @@ export default {
 
     },
 
+    /* --- Porcentaje de la barra de plazas --- */
     occupancyPercent() {
 
+      /* --- Si no hay capacidad, se muestra 0% --- */
       if (!this.activity.capacity) return 0;
+
+      /* --- Número de usuarios --- */
       const users = this.activity.users ? this.activity.users.length : 0;
+
+      /* --- Regla de tres para sacar el % de ancho que se pintará en la barra --- */
       return Math.min((users / this.activity.capacity) * 100, 100);
 
     },
 
+    /* --- Comprobar si el concierto está lleno --- */
     isFull() {
 
       const users = this.activity.users ? this.activity.users.length : 0;
@@ -165,6 +205,7 @@ export default {
 
     },
 
+    /* --- Comprobar si el concierto ha finalizado --- */
     isFinished() {
 
       return this.activity.state === 'finished';
@@ -173,8 +214,10 @@ export default {
 
   },
 
+  /* --- Métodos --- */
   methods: {
 
+    /* --- Truncar texto del nombre de la imagen para que no deforme la tarjeta --- */
     truncateText(text, length) {
 
       if (!text) return '';
@@ -182,6 +225,7 @@ export default {
 
     },
 
+    /* --- Formatear fecha --- */
     formatDate(dateString) {
 
       if (!dateString) return '';
@@ -206,6 +250,7 @@ export default {
 
     },
 
+    /* --- Formatear hora --- */
     formatTime(dateString) {
 
       if (!dateString) return '';
@@ -227,6 +272,7 @@ export default {
 
     },
 
+    /* --- Manejar error de imagen --- */
     handleImageError(e) {
 
       e.target.src = 'https://via.placeholder.com/400x250?text=No+Image';
@@ -239,8 +285,10 @@ export default {
 
 </script>
 
+<!-- --- Estilos del componente --- -->
 <style scoped>
 
+/* --- Contenedor principal de la tarjeta --- */
 .activity-card {
 
   background: #120c1d;
@@ -264,6 +312,7 @@ export default {
 
 }
 
+/* --- Header --- */
 .card-header {
 
   height: 180px;
@@ -273,6 +322,7 @@ export default {
 
 }
 
+/* --- Imagen --- */
 .card-image {
 
   width: 100%;
@@ -299,6 +349,7 @@ export default {
 
 }
 
+/* --- Contenido --- */
 .card-body {
 
   padding: 1.2rem 1.5rem;
@@ -388,6 +439,7 @@ export default {
 
 }
 
+/* --- Footer --- */
 .card-footer {
 
   margin-top: auto;
@@ -397,6 +449,7 @@ export default {
 
 }
 
+/* --- Botones --- */
 .action-btn {
 
   border-radius: 12px;

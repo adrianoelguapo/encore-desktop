@@ -1,26 +1,34 @@
+<!-- --- Estructura de la barra de navegación (solo Home, Login y Registro) --- -->
 <template>
 
-  <!-- Navigation Bar -->
+  <!-- --- Contenedor principal del componente --- -->
   <div class = "navigation-container">
 
+    <!-- --- Contenedor de la barra de navegación --- -->
     <nav class = "navigation-bar">
 
+      <!-- --- Contenedor auxiliar para envolver la barra de navegación --- -->
       <div class = "navigation-wrapper">
 
+        <!-- --- Enlace a la página de inicio --- -->
         <router-link to = "/" class = "logo-link">
 
-            <h1 class = "logo-text">Encore Festival</h1>
+          <!-- --- Logo --- -->
+          <h1 class = "logo-text">Encore Festival</h1>
 
         </router-link>
         
+        <!-- --- Botones de login y registro --- -->
         <div class = "auth-buttons-group">
 
+          <!-- --- Si el usuario está autenticado, se muestra el botón de logout --- -->
           <template v-if = "isAuthenticated">
 
             <button @click = "handleLogout" class = "logout-button">Log Out</button>
 
           </template>
 
+          <!-- --- Si el usuario no está autenticado, se muestran los botones de login y registro --- -->
           <template v-else>
 
             <router-link to = "/login" class = "login-button">Log In</router-link>
@@ -38,49 +46,69 @@
 
 </template>
 
+<!-- --- Lógica del componente --- -->
 <script>
 
+/* --- Importación del servicio de autenticación --- */
 import authService from '@/services/authService'
 
+/* --- Exportación del componente --- */
 export default {
 
+  /* --- Nombre del componente --- */
   name: 'NavbarComponent',
 
+  /* --- Estructura de datos del componente --- */
   data() {
 
     return {
 
+      /* --- Está autenticado o no --- */
       isAuthenticated: false
 
     }
 
   },
 
+  /* --- Cuando el componente se carga --- */
   mounted() {
 
+    /* --- Comprueba si el usuario está autenticado --- */
     this.checkAuth()
+
+    /* --- Añade un listener para cuando el usuario se desloguea --- */
     window.addEventListener('storage', this.checkAuth)
 
   },
 
+  /* --- Antes de que el componente se desmonte --- */
   beforeUnmount() {
 
+    /* --- Elimina el listener --- */
     window.removeEventListener('storage', this.checkAuth)
 
   },
 
+  /* --- Métodos del componente --- */
   methods: {
 
+    /* --- Comprueba si el usuario está autenticado --- */
     checkAuth() {
 
       this.isAuthenticated = authService.isAuthenticated()
 
     },
 
+    /* --- Maneja el logout --- */
     handleLogout() {
 
+      /* --- Cierra la sesión --- */
       authService.logout()
+
+      /* --- Actualiza el estado de autenticación --- */
       this.isAuthenticated = false
+
+      /* --- Redirige al usuario a la página de inicio --- */
       this.$router.push('/')
 
     }
@@ -91,9 +119,11 @@ export default {
 
 </script>
 
+<!-- --- Estilos del componente --- -->
 <style scoped>
 
-.navigation-container{
+/* --- Contenedor principal --- */
+.navigation-container {
 
   display: flex;
   justify-content: center;
@@ -102,6 +132,7 @@ export default {
 
 }
 
+/* --- Barra de navegación --- */
 .navigation-bar {
 
   width: 70%;
@@ -128,6 +159,7 @@ export default {
 
 }
 
+/* --- Enlace al logo --- */
 .logo-link {
 
   text-decoration: none;
@@ -143,6 +175,7 @@ export default {
 
 }
 
+/* --- Botones de login y registro --- */
 .auth-buttons-group {
 
   display: flex;
